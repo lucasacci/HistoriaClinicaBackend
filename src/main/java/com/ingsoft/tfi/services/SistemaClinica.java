@@ -25,4 +25,8 @@ public class SistemaClinica {
     public PacienteModel buscarPaciente(String dniPaciente){
         return pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
     }
+
+    public String agregarPaciente(PacienteModel paciente){
+        return pacienteService.agregarPaciente(paciente);
+    }
 }

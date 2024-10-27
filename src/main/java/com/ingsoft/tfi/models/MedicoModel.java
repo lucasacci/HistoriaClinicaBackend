@@ -36,6 +36,9 @@ public class MedicoModel extends PersonaModel{
         this.especialidad = especialidad;
     }
 
+    public MedicoModel(String doctor) {
+    }
+
     public Long getId_medico() {
         return id_medico;
     }

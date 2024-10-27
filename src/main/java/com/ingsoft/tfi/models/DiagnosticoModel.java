@@ -26,7 +26,7 @@ public class DiagnosticoModel {
 
     public DiagnosticoModel(String descripcion) {
         this.descripcion = descripcion;
-    //    this.evoluciones = new ArrayList<EvolucionModel>();
+       this.evoluciones = new ArrayList<EvolucionModel>();
     }
 
     public DiagnosticoModel() {

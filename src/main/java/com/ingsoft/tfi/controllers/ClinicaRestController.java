@@ -2,6 +2,7 @@ package com.ingsoft.tfi.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ingsoft.tfi.models.MedicoModel;
+import com.ingsoft.tfi.models.PacienteModel;
 import com.ingsoft.tfi.services.SistemaClinica;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,5 +57,18 @@ public class ClinicaRestController {
             return new ResponseEntity<>(JsonParser.pacienteAJson(paciente), HttpStatus.OK);
 
     }
+
+
+    @PostMapping("/pacientes")
+    public ResponseEntity<String> agregarPaciente(@RequestBody JsonNode jsonPaciente) {
+        // Convertimos el JSON recibido a un objeto PacienteModel usando JsonParser
+        PacienteModel paciente = JsonParser.pacienteDesdeJson(jsonPaciente);
+
+        // Lógica para agregar el paciente
+        String respuesta = sistemaClinica.agregarPaciente(paciente);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
+    }
+
 
 }
