@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 public class ClinicaRestController {
@@ -36,14 +37,14 @@ public class ClinicaRestController {
     }
 
 
-    @PostMapping("/paciente/{dniPaciente}/diagnostico/{nombreDiagnostico}/evolucion")
+    @PostMapping("/paciente/{dniPaciente}/diagnostico/{id_diagnostico}/evolucion")
     public ResponseEntity<JsonNode> agregarEvolucion(@PathVariable String dniPaciente,
-                                             @PathVariable String nombreDiagnostico,
+                                             @PathVariable Long idDiagnostico,
                                              @RequestBody JsonNode json){
 
         var paciente = this.sistemaClinica.agregarEvolucion(medicoPrueba,
                 dniPaciente,
-                nombreDiagnostico,
+                idDiagnostico,
                 JsonParser.informeDesdeJson(json));
 
         return new ResponseEntity<>(JsonParser.pacienteAJson(paciente), HttpStatus.CREATED);
@@ -51,23 +52,42 @@ public class ClinicaRestController {
 
     @GetMapping("/paciente/{dniPaciente}")
     public ResponseEntity<JsonNode> buscarPaciente(@PathVariable String dniPaciente){
-        System.out.println(dniPaciente);
             var paciente = this.sistemaClinica.buscarPaciente(dniPaciente);
         System.out.println(paciente);
             return new ResponseEntity<>(JsonParser.pacienteAJson(paciente), HttpStatus.OK);
-
     }
+//
+//    @GetMapping("/pacientes")
+//    public ResponseEntity<JsonNode> buscarPacientes() {
+//        List<PacienteModel> pacientes = JsonParser.pacienteDesdeJson()
+//
+//        return
+//    }
 
-
-    @PostMapping("/pacientes")
+    @PostMapping("/paciente")
     public ResponseEntity<String> agregarPaciente(@RequestBody JsonNode jsonPaciente) {
-        // Convertimos el JSON recibido a un objeto PacienteModel usando JsonParser
         PacienteModel paciente = JsonParser.pacienteDesdeJson(jsonPaciente);
 
-        // Lógica para agregar el paciente
         String respuesta = sistemaClinica.agregarPaciente(paciente);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
+    }
+
+    @DeleteMapping("/paciente/{dniPaciente}")
+    public ResponseEntity<String> eliminarPaciente(@PathVariable String dniPaciente){
+            String resultado = sistemaClinica.borrarPaciente(dniPaciente);
+
+            return ResponseEntity.status(HttpStatus.OK).body(resultado);
+
+    }
+
+    @PutMapping("/paciente/{idPaciente}")
+    public ResponseEntity<String> editarPaciente(@PathVariable String idPaciente, @RequestBody JsonNode jsonPaciente){
+        PacienteModel paciente = JsonParser.pacienteDesdeJson(jsonPaciente);
+
+        String respuesta = sistemaClinica.editarPaciente(paciente);
+
+        return ResponseEntity.status(HttpStatus.OK).body(respuesta);
     }
 
 

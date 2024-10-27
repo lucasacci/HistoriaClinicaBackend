@@ -22,7 +22,7 @@ public class PacienteService {
 
 
     public PacienteService() {
-        pacientes = new HashMap<>(); // Inicialización en el constructor
+        pacientes = new HashMap<>();
     }
 
 
@@ -35,17 +35,15 @@ public class PacienteService {
 //    }
 
     public Optional<PacienteModel> buscarPaciente(String dniPaciente){
-
         return repositorioPaciente.findByDni(dniPaciente);
     }
 
     public String agregarPaciente(PacienteModel paciente) {
-        System.out.println(paciente.getDni());
         try {
             if (buscarPaciente(paciente.getDni()).isPresent()) {
                 return "Paciente ya existente: " + paciente.getDni();
             } else {
-                repositorioPaciente.save(paciente); // Guardar el paciente en la base de datos
+                repositorioPaciente.save(paciente);
                 return "Paciente registrado: " + paciente.getDni();
             }
         } catch (Exception e) {
@@ -53,12 +51,39 @@ public class PacienteService {
         }
     }
 
-
-
-
-    public void actualizarPaciente(PacienteModel paciente) {
-        repositorioPaciente.save(paciente); // Actualizar paciente en la base de datos
+    public String borrarPaciente(String dniPaciente) {
+        if (repositorioPaciente.findByDni(dniPaciente).isPresent()) {
+            try{
+                repositorioPaciente.deleteById(repositorioPaciente.findByDni(dniPaciente).get().id_paciente);
+                return "Paciente eliminado: " + dniPaciente;
+            } catch (Exception e) {
+                return "Error al borrar el paciente: " + e.getMessage();
+            }
+        }else{
+            return "Paciente no encontrado: " + dniPaciente;
+        }
     }
+
+
+
+
+    public String actualizarPaciente(PacienteModel paciente) {
+        PacienteModel pacienteViejo = repositorioPaciente.findByDni(paciente.getDni()).get();
+
+        pacienteViejo.setNombre(paciente.getNombre());
+        pacienteViejo.setApellido(paciente.getApellido());
+        pacienteViejo.setEmail(paciente.getEmail());
+        pacienteViejo.setDni(paciente.getDni());
+        pacienteViejo.setFechaNacimiento(paciente.getFechaNacimiento());
+        pacienteViejo.setDireccion(paciente.getDireccion());
+        pacienteViejo.setTelefono(paciente.getTelefono());
+
+        repositorioPaciente.save(pacienteViejo);
+
+        return "Paciente actualizado: " + paciente.getDni();
+
+    }
+
 
 //    private void cargarPacientes(){
 //        pacientes.put("13232", new PacienteModel("daniel",

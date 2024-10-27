@@ -39,11 +39,11 @@ public class PacienteModel extends PersonaModel{
         super();
     }
 
-    public DiagnosticoModel buscarDiagnostico(String nombreDiagnostico){
-        return this.historiaClinica.buscarDiagnostico(nombreDiagnostico);
+    public DiagnosticoModel buscarDiagnostico(Long idDiagnostico){
+        return this.historiaClinica.buscarDiagnostico(idDiagnostico);
     }
 
-    public void agregarEvolucion(String diagnosticoElegido, MedicoModel medico, String informe){
+    public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe){
         this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe);
     }
 

@@ -33,8 +33,8 @@ public class DiagnosticoModel {
 
     }
 
-    public boolean tieneNombre(String nombre) {
-        return this.descripcion.equals(nombre);
+    public boolean existeDiagnostico(Long id) {
+        return this.id.equals(id);
     }
 
     public boolean tieneEvolucion(MedicoModel medico, String informe){
