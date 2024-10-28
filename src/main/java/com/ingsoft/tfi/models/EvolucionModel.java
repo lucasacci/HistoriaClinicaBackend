@@ -3,6 +3,7 @@ package com.ingsoft.tfi.models;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Entity
 @Table(name = "evoluciones")
@@ -25,10 +26,17 @@ public class EvolucionModel {
     @JoinColumn(name = "id_medico")
     private MedicoModel medico;
 
-    public EvolucionModel(String informe, Date fecha, MedicoModel medico) {
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_receta")
+    private Optional<RecetaDigitalModel> recetaDigital;
+
+    public EvolucionModel(String informe, Date fecha, MedicoModel medico, Optional<RecetaDigitalModel> recetaDigital) {
         this.informe = informe;
         this.fecha = fecha;
         this.medico = medico;
+        if(recetaDigital.isPresent()){
+            this.recetaDigital = recetaDigital;
+        }
     }
 
     public EvolucionModel() {
@@ -38,6 +46,8 @@ public class EvolucionModel {
     public boolean tiene(MedicoModel medico, String informe){
         return this.informe.equals(informe) && this.medico.equals(medico);
     }
+
+    public Optional<RecetaDigitalModel> getRecetaDigital(){ return recetaDigital; }
 
     public DiagnosticoModel getDiagnostico() {
         return diagnostico;

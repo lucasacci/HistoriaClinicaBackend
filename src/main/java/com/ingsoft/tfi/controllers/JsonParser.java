@@ -3,13 +3,17 @@ package com.ingsoft.tfi.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ingsoft.tfi.models.*;
 import jdk.jshell.Diag;
+import org.springframework.cache.support.NullValue;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,6 +26,39 @@ public class JsonParser {
 
     public static String informeDesdeJson(JsonNode json){
         return json.get("informe").asText("");
+    }
+
+    public static RecetaDigitalModel recetaDigitalDesdeJson(JsonNode json){
+        if (!json.has("receta")) {
+            return new RecetaDigitalModel();
+        }
+
+        List<MedicamentoModel> medicamentos = new ArrayList<>();
+
+        json.get("medicamentos").forEach( medicamentoJson -> {
+            MedicamentoModel medicamento = new MedicamentoModel(
+                    medicamentoJson.get("nombreComercial").asText(),
+                    medicamentoJson.get("nombreGenerico").asText(),
+                    medicamentoJson.get("cantidad").asInt()
+            );
+            medicamentos.add(medicamento);
+        });
+
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = formatter.parse(json.get("fecha").asText());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        RecetaDigitalModel recetaDigital = new RecetaDigitalModel(
+                date,
+                json.get("descripcion").asText(),
+                medicamentos
+        );
+
+        return recetaDigital;
     }
 
     public static JsonNode pacienteAJson(PacienteModel paciente){

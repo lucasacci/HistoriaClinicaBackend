@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ClinicaRestController {
@@ -45,7 +46,8 @@ public class ClinicaRestController {
         var paciente = this.sistemaClinica.agregarEvolucion(medicoPrueba,
                 dniPaciente,
                 idDiagnostico,
-                JsonParser.informeDesdeJson(json));
+                JsonParser.informeDesdeJson(json),
+                Optional.of(JsonParser.recetaDigitalDesdeJson(json)));
         return new ResponseEntity<>(JsonParser.pacienteAJson(paciente), HttpStatus.CREATED);
     }
 

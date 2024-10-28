@@ -3,9 +3,11 @@ package com.ingsoft.tfi.services;
 
 import com.ingsoft.tfi.models.MedicoModel;
 import com.ingsoft.tfi.models.PacienteModel;
+import com.ingsoft.tfi.models.RecetaDigitalModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SistemaClinica {
@@ -19,7 +21,7 @@ public class SistemaClinica {
     public PacienteModel agregarEvolucion(MedicoModel medico, String dniPaciente, Long diagnosticoElegido, String informe){
         PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
 
-        paciente.agregarEvolucion(diagnosticoElegido, medico, informe);
+        paciente.agregarEvolucion(diagnosticoElegido, medico, informe, );
 
         pacienteService.actualizarPaciente(paciente);
         return paciente;
