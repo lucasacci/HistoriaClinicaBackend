@@ -20,6 +20,7 @@ public class SistemaClinica {
         PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
 
         paciente.agregarEvolucion(diagnosticoElegido, medico, informe);
+
         pacienteService.actualizarPaciente(paciente);
         return paciente;
     }

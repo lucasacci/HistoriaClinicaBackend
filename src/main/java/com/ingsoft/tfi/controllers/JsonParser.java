@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ingsoft.tfi.models.*;
+import jdk.jshell.Diag;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,7 +52,10 @@ public class JsonParser {
         ObjectNode json = mapper.createObjectNode();
         ArrayNode array = mapper.createArrayNode();
 
-        diagnostico.getEvoluciones().forEach(evolucion -> array.add(evolucionAJson(evolucion)));
+        diagnostico.getEvoluciones().forEach(evolucion -> {
+            array.add(evolucionAJson(evolucion));
+        });
+
         json.put("id_diagnostico", diagnostico.getId());
         json.put("descripcion", diagnostico.getDescripcion());
         json.set("evoluciones", array);
@@ -69,6 +73,7 @@ public class JsonParser {
         json.put("informe", evolucion.getInforme());
         json.put("doctor", evolucion.getMedico().getNombre());
         json.put("fecha", formattedDate);
+
         return json;
     }
 
@@ -99,6 +104,7 @@ public class JsonParser {
         paciente.setEmail(email);
         paciente.setTelefono(telefono);
         paciente.setFechaNacimiento(fechaNacimiento);
+        paciente.setDireccion(direccion);
 
         HistoriaClinicaModel historiaClinica = historiaClinicaDesdeJson(json);
         paciente.setHistoriaClinica(historiaClinica);
@@ -116,43 +122,20 @@ public class JsonParser {
         HistoriaClinicaModel historiaClinica = new HistoriaClinicaModel();
         List<DiagnosticoModel> diagnosticos = new ArrayList<>();
 
-        if (json.has("diagnosticos")) {
-            json.get("diagnosticos").forEach(diagnosticoJson -> {
-                DiagnosticoModel diagnostico = diagnosticoDesdeJson(diagnosticoJson);
+        if (json.has("historiaClinica") && json.get("historiaClinica").has("diagnosticos")) {
+            json.get("historiaClinica").get("diagnosticos").forEach(diagnosticoJson -> {
+                DiagnosticoModel diagnostico = new DiagnosticoModel();
+                diagnostico.setDescripcion(diagnosticoJson.get("descripcion").asText());
                 diagnostico.setHistoriaClinica(historiaClinica);
-                historiaClinica.setDiagnosticos(diagnosticos);
                 diagnosticos.add(diagnostico);
             });
         }
-        historiaClinica.setDiagnosticos(diagnosticos);
+
+        historiaClinica.setDiagnosticos(diagnosticos); // Asigna la lista completa de diagnósticos a la historia clínica
         return historiaClinica;
     }
 
-    private static DiagnosticoModel diagnosticoDesdeJson(JsonNode json) {
-        DiagnosticoModel diagnostico = new DiagnosticoModel();
-        diagnostico.setDescripcion(json.get("descripcion").asText());
 
-        List<EvolucionModel> evoluciones = new ArrayList<>();
-        if (json.has("evoluciones")) {
-            json.get("evoluciones").forEach(evolucionJson -> {
-                evoluciones.add(evolucionDesdeJson(evolucionJson));
-            });
-        }
-        diagnostico.setEvoluciones(evoluciones);
-
-        return diagnostico;
-    }
-
-    private static EvolucionModel evolucionDesdeJson(JsonNode json) {
-        EvolucionModel evolucion = new EvolucionModel();
-        evolucion.setInforme(json.get("informe").asText());
-        evolucion.setMedico(new MedicoModel(json.get("doctor").asText())); // Simplificado para ejemplo
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        Instant instant = Instant.from(formatter.parse(json.get("fecha").asText()));
-        evolucion.setFecha(Date.from(instant));
-
-        return evolucion;
-    }
 
 
 

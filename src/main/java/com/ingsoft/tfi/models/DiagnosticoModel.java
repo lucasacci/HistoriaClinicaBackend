@@ -21,7 +21,7 @@ public class DiagnosticoModel {
     @JoinColumn(name = "id_historia_clinica")
     private HistoriaClinicaModel historiaClinica;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "diagnostico")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "diagnostico")
     private List<EvolucionModel> evoluciones;
 
     public DiagnosticoModel(String descripcion) {
@@ -45,6 +45,7 @@ public class DiagnosticoModel {
         Timestamp fechaEvolucion = new Timestamp(new Date().getTime());
         EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico);
 
+        evolucion.setDiagnostico(this);
         evoluciones.add(evolucion);
     }
 

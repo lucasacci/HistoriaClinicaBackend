@@ -41,7 +41,11 @@ public class HistoriaClinicaModel {
 
     public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe) {
         DiagnosticoModel diagnostico = buscarDiagnostico(diagnosticoElegido);
-        diagnostico.agregarEvolucion(medico, informe);
+        if (diagnostico != null) {
+            diagnostico.agregarEvolucion(medico, informe);
+        } else {
+            throw new RuntimeException("Diagnóstico no encontrado");
+        }
     }
 
     public int getId_historia_clinica() {

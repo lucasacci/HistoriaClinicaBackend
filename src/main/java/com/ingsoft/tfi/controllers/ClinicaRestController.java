@@ -21,10 +21,10 @@ public class ClinicaRestController {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     Date fecha = sdf.parse("23/02/2000");
 //TODO: Elimnar y usar la sesion para obtener el medico
-    private final MedicoModel medicoPrueba = new MedicoModel("Lucho",
+    private final MedicoModel medicoPrueba = new MedicoModel(1l,"Lucho",
             "Casacci",
             "x",
-            "olombiac",
+            "colombia",
             fecha,
             "m2a",
             38123,
@@ -37,7 +37,7 @@ public class ClinicaRestController {
     }
 
 
-    @PostMapping("/paciente/{dniPaciente}/diagnostico/{id_diagnostico}/evolucion")
+    @PostMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion")
     public ResponseEntity<JsonNode> agregarEvolucion(@PathVariable String dniPaciente,
                                              @PathVariable Long idDiagnostico,
                                              @RequestBody JsonNode json){
@@ -46,7 +46,6 @@ public class ClinicaRestController {
                 dniPaciente,
                 idDiagnostico,
                 JsonParser.informeDesdeJson(json));
-
         return new ResponseEntity<>(JsonParser.pacienteAJson(paciente), HttpStatus.CREATED);
     }
 

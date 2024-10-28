@@ -1,7 +1,11 @@
 package com.ingsoft.tfi.services;
 
+import com.ingsoft.tfi.models.DiagnosticoModel;
+import com.ingsoft.tfi.models.EvolucionModel;
+import com.ingsoft.tfi.models.HistoriaClinicaModel;
 import com.ingsoft.tfi.models.PacienteModel;
 import com.ingsoft.tfi.repositories.IRepositorioPaciente;
+import jdk.jshell.Diag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,24 +19,12 @@ public class PacienteService {
     @Autowired
     IRepositorioPaciente repositorioPaciente;
 
-//    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//    Date fecha = sdf.parse("23/02/2000");
-
     private Map<String, PacienteModel> pacientes;
 
 
     public PacienteService() {
         pacientes = new HashMap<>();
     }
-
-
-//    public PacienteService() throws ParseException {
-//        pacientes = new HashMap<>();
-//        //TODO: quitar esto cuando implemente la db
-//
-//        cargarPacientes();
-//
-//    }
 
     public Optional<PacienteModel> buscarPaciente(String dniPaciente){
         return repositorioPaciente.findByDni(dniPaciente);
@@ -79,24 +71,8 @@ public class PacienteService {
         pacienteViejo.setTelefono(paciente.getTelefono());
 
         repositorioPaciente.save(pacienteViejo);
-
         return "Paciente actualizado: " + paciente.getDni();
 
     }
-
-
-//    private void cargarPacientes(){
-//        pacientes.put("13232", new PacienteModel("daniel",
-//                "osvaldo",
-//                "12232",
-//                "dsada",
-//                fecha,
-//                "colombia",
-//                1234,
-//                List.of("angina")
-//                ));
-//    }
-
-
 
 }
