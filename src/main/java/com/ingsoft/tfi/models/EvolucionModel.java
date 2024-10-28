@@ -39,6 +39,14 @@ public class EvolucionModel {
         return this.informe.equals(informe) && this.medico.equals(medico);
     }
 
+    public DiagnosticoModel getDiagnostico() {
+        return diagnostico;
+    }
+
+    public void setDiagnostico(DiagnosticoModel diagnostico) {
+        this.diagnostico = diagnostico;
+    }
+
     public Long getId_evolucion() {
         return id_evolucion;
     }

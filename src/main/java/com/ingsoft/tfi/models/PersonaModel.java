@@ -24,6 +24,10 @@ public abstract class PersonaModel {
         this.telefono = telefono;
     }
 
+    public PersonaModel() {
+
+    }
+
     public String getNombre() {
         return nombre;
     }

@@ -22,7 +22,8 @@ public class MedicoModel extends PersonaModel{
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "medico")
     private List<EvolucionModel> evoluciones;
 //TODO: Agregar id_medico al constructor
-    public MedicoModel(String nombre,
+    public MedicoModel(Long id_medico,
+            String nombre,
                        String apellido,
                        String dni,
                        String email,
@@ -34,6 +35,9 @@ public class MedicoModel extends PersonaModel{
         super(nombre, apellido, dni, email, fechaNacimiento, direccion, telefono);
         this.matricula = matricula;
         this.especialidad = especialidad;
+    }
+
+    public MedicoModel() {
     }
 
     public Long getId_medico() {

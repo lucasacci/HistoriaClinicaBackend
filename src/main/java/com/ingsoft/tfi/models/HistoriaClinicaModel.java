@@ -14,9 +14,6 @@ public class HistoriaClinicaModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_historia_clinica;
 
-    @Column
-    private Date fecha;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_paciente")
     private PacienteModel paciente;
@@ -35,16 +32,20 @@ public class HistoriaClinicaModel {
 
     }
 
-    public DiagnosticoModel buscarDiagnostico(String nombreDiagnostico) {
+    public DiagnosticoModel buscarDiagnostico(Long idDiagnostico) {
         return this.diagnosticos.stream()
-                .filter(diagnostico -> diagnostico.tieneNombre(nombreDiagnostico))
+                .filter(diagnostico -> diagnostico.existeDiagnostico(idDiagnostico))
                 .findFirst()
-                .orElseThrow(()-> new RuntimeException("diagnostico no encontrado"));
+                .orElseThrow(() -> new RuntimeException("diagnostico no encontrado"));
     }
 
-    public void agregarEvolucion(String diagnosticoElegido, MedicoModel medico, String informe) {
+    public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe) {
         DiagnosticoModel diagnostico = buscarDiagnostico(diagnosticoElegido);
-        diagnostico.agregarEvolucion(medico,informe);
+        if (diagnostico != null) {
+            diagnostico.agregarEvolucion(medico, informe);
+        } else {
+            throw new RuntimeException("Diagnóstico no encontrado");
+        }
     }
 
     public int getId_historia_clinica() {
@@ -71,11 +72,4 @@ public class HistoriaClinicaModel {
         this.paciente = paciente;
     }
 
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
 }
