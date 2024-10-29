@@ -21,6 +21,7 @@ public class SistemaClinica {
     public PacienteModel agregarEvolucion(MedicoModel medico, String dniPaciente, Long diagnosticoElegido, String informe, Optional<RecetaDigitalModel> recetaDigital){
         PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
 
+
         paciente.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital);
 
         pacienteService.actualizarPaciente(paciente);
@@ -42,4 +43,7 @@ public class SistemaClinica {
         return pacienteService.actualizarPaciente(paciente);
     }
 
+    public List<PacienteModel> getPacientes() {
+        return pacienteService.getPacientes();
+    }
 }
