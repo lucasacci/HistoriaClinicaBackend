@@ -42,9 +42,10 @@ public class DiagnosticoModel {
 //        return evoluciones.stream().anyMatch(evolucion -> evolucion.tiene(medico, informe));
 //    }
 
-    public void agregarEvolucion(MedicoModel medico, String informe, Optional<RecetaDigitalModel> recetaDigital) {
+    public void agregarEvolucion(MedicoModel medico, String informe,
+                                 Optional<RecetaDigitalModel> recetaDigital, Optional<PedidoLaboratorioModel> pedidoLaboratorio) {
         Timestamp fechaEvolucion = new Timestamp(new Date().getTime());
-        EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital);
+        EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital, pedidoLaboratorio);
         evolucion.setDiagnostico(this);
         evoluciones.add(evolucion);
     }

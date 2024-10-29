@@ -71,6 +71,21 @@ public class JsonParser {
         return Optional.of(recetaDigital);
     }
 
+    public static Optional<PedidoLaboratorioModel> pedidoLaboratorioDesdeJson(JsonNode json){
+        if (!json.has("pedidoLaboratorio")) {
+            return Optional.empty();
+        }
+
+        JsonNode jsonPedidoLab = json.get("pedidoLaboratorio");
+
+        PedidoLaboratorioModel pedidoLaboratorio = new PedidoLaboratorioModel(
+                jsonPedidoLab.get("descripcion").asText()
+        );
+
+        return Optional.of(pedidoLaboratorio);
+    }
+
+
     public static JsonNode pacienteAJson(PacienteModel paciente){
         ObjectNode json= mapper.createObjectNode();
 
@@ -121,6 +136,36 @@ public class JsonParser {
         json.put("informe", evolucion.getInforme());
         json.put("doctor", evolucion.getMedico().getNombre());
         json.put("fecha", formattedDate);
+
+        if (evolucion.getRecetaDigital() != null) {
+            json.set("receta", recetaDigitalAJson(evolucion.getRecetaDigital()));
+        }
+
+        return json;
+    }
+
+    private static JsonNode recetaDigitalAJson(RecetaDigitalModel recetaDigital) {
+        ObjectNode json = mapper.createObjectNode();
+        ArrayNode array = mapper.createArrayNode();
+
+        json.put("fecha", recetaDigital.getFecha().toString());
+        json.put("descripcion", recetaDigital.getDescripcion());
+
+        recetaDigital.getRecetaDigitaldetalle().forEach(receta -> {
+            array.add(recetaDigitalDetalleAJson(receta));
+        });
+
+        json.set("medicamentos", array);
+
+        return json;
+    }
+
+    private static JsonNode recetaDigitalDetalleAJson(RecetaDigitalDetalleModel recetaDetalle) {
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("nombreComercial", recetaDetalle.getMedicamento().getNombreComercial());
+        json.put("nombreGenerico", recetaDetalle.getMedicamento().getNombreGenerico());
+        json.put("cantidad", recetaDetalle.getCantidad());
 
         return json;
     }

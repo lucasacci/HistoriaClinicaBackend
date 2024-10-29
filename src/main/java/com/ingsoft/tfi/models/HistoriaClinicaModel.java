@@ -48,10 +48,11 @@ public class HistoriaClinicaModel {
                 .orElseThrow(() -> new RuntimeException("diagnostico no encontrado"));
     }
 
-    public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe, Optional<RecetaDigitalModel> recetaDigital) {
+    public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe,
+                                 Optional<RecetaDigitalModel> recetaDigital, Optional<PedidoLaboratorioModel> pedidoLaboratorio) {
         DiagnosticoModel diagnostico = buscarDiagnostico(diagnosticoElegido);
         if (diagnostico != null) {
-            diagnostico.agregarEvolucion(medico, informe, recetaDigital);
+            diagnostico.agregarEvolucion(medico, informe, recetaDigital, pedidoLaboratorio);
         } else {
             throw new RuntimeException("Diagnóstico no encontrado");
         }

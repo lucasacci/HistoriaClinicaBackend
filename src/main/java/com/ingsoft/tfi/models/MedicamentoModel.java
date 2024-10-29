@@ -23,4 +23,28 @@ public class MedicamentoModel {
     }
 
     public MedicamentoModel(){}
+
+    public int getId_medicamento() {
+        return id_medicamento;
+    }
+
+    public void setId_medicamento(int id_medicamento) {
+        this.id_medicamento = id_medicamento;
+    }
+
+    public String getNombreComercial() {
+        return nombreComercial;
+    }
+
+    public void setNombreComercial(String nombreComercial) {
+        this.nombreComercial = nombreComercial;
+    }
+
+    public String getNombreGenerico() {
+        return nombreGenerico;
+    }
+
+    public void setNombreGenerico(String nombreGenerico) {
+        this.nombreGenerico = nombreGenerico;
+    }
 }

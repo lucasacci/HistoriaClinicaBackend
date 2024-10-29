@@ -44,8 +44,9 @@ public class PacienteModel extends PersonaModel{
         return this.historiaClinica.buscarDiagnostico(idDiagnostico);
     }
 
-    public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe, Optional<RecetaDigitalModel> recetaDigital){
-        this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital);
+    public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe,
+                                 Optional<RecetaDigitalModel> recetaDigital, Optional<PedidoLaboratorioModel> pedidoLaboratorio){
+        this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital, pedidoLaboratorio);
     }
 
     public Long getId_paciente() {
