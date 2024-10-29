@@ -40,7 +40,9 @@ public class SistemaClinica {
     }
 
     public String editarPaciente(PacienteModel paciente) {
-        return pacienteService.actualizarPaciente(paciente);
+        return pacienteService.buscarPaciente(paciente.getDni())
+                .map(existingPaciente -> pacienteService.actualizarPaciente(paciente))
+                .orElse("Paciente no encontrado");
     }
 
     public List<PacienteModel> getPacientes() {
