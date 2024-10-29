@@ -48,4 +48,12 @@ public class SistemaClinica {
     public List<PacienteModel> getPacientes() {
         return pacienteService.getPacientes();
     }
+
+    public void agregarDiagnostico(String dniPaciente, String diagnostico) {
+        PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
+
+        paciente.agregarDiagnostico(diagnostico);
+
+        pacienteService.actualizarPaciente(paciente);
+    }
 }

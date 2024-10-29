@@ -136,6 +136,10 @@ public class JsonParser {
         return historiaClinica;
     }
 
+    public static String diagnosticoDesdeJson(JsonNode json) {
+        return json.get("descripcion").asText("");
+    }
+
 
 
 

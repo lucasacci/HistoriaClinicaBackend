@@ -2,6 +2,7 @@ package com.ingsoft.tfi.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,13 @@ public class HistoriaClinicaModel {
 
     public HistoriaClinicaModel() {
 
+    }
+
+    public void agregarDiagnostico(String diagnostico) {
+        DiagnosticoModel diagnosticoNuevo = new DiagnosticoModel(diagnostico);
+        diagnosticoNuevo.setEvoluciones(new ArrayList<>());
+        diagnosticos.add(diagnosticoNuevo);
+        diagnosticoNuevo.setHistoriaClinica(this);
     }
 
     public DiagnosticoModel buscarDiagnostico(Long idDiagnostico) {
