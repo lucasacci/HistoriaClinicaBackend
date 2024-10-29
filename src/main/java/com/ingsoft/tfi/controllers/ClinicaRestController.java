@@ -77,6 +77,27 @@ public class ClinicaRestController {
 //        return new ResponseEntity<>(JsonParser.pacienteAJson(paciente), HttpStatus.CREATED);
 //    }
 
+    @PostMapping("/paciente/{dniPaciente}/diagnostico")
+    public ResponseEntity<ApiResponse<String>> agregarDiagnostico(@PathVariable String dniPaciente, @RequestBody JsonNode json) {
+        try {
+            String descripcionDiagnostico = JsonParser.diagnosticoDesdeJson(json);
+
+            sistemaClinica.agregarDiagnostico(dniPaciente, descripcionDiagnostico);
+
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(),
+                    "Diagnóstico agregado exitosamente.",
+                    null);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+                    "Error al agregar diagnóstico: " + e.getMessage(),
+                    null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
     @GetMapping("/paciente")
     public ResponseEntity<ApiResponse<?>> getPacientes(){
         List<PacienteModel> pacientes = sistemaClinica.getPacientes();
@@ -119,13 +140,6 @@ public class ClinicaRestController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
-//
-//    @GetMapping("/pacientes")
-//    public ResponseEntity<JsonNode> buscarPacientes() {
-//        List<PacienteModel> pacientes = JsonParser.pacienteDesdeJson()
-//
-//        return
-//    }
 
     @PostMapping("/paciente")
     public ResponseEntity<ApiResponse<?>> agregarPaciente(@RequestBody JsonNode jsonPaciente) {

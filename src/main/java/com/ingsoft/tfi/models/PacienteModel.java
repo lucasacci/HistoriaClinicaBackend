@@ -63,4 +63,8 @@ public class PacienteModel extends PersonaModel{
     public void setHistoriaClinica(HistoriaClinicaModel historiaClinica) {
         this.historiaClinica = historiaClinica;
     }
+
+    public void agregarDiagnostico(String diagnostico) {
+        historiaClinica.agregarDiagnostico(diagnostico);
+    }
 }
