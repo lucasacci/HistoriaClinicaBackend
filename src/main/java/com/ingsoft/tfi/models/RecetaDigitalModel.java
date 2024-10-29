@@ -18,13 +18,13 @@ public class RecetaDigitalModel {
     @Column
     private String descripcion;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "id_medicamentos")
-    private List<MedicamentoModel> medicamentos;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "id_receta_digital_detalle")
+    private List<RecetaDigitalDetalleModel> recetaDigitaldetalle;
 
-    public RecetaDigitalModel(Date fecha, String descripcion, List<MedicamentoModel> medicamentos) {
+    public RecetaDigitalModel(Date fecha, String descripcion, List<RecetaDigitalDetalleModel> recetaDigitalDetalle) {
         this.fecha = fecha;
         this.descripcion = descripcion;
-        this.medicamentos = medicamentos;
+        this.recetaDigitaldetalle = recetaDigitalDetalle;
     }
 
     public RecetaDigitalModel() {

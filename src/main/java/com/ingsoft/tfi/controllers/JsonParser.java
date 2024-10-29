@@ -34,29 +34,38 @@ public class JsonParser {
             return Optional.empty();
         }
 
-        List<MedicamentoModel> medicamentos = new ArrayList<>();
+        JsonNode jsonReceta = json.get("receta");
 
-        json.get("medicamentos").forEach( medicamentoJson -> {
+        List<RecetaDigitalDetalleModel> recetaDigitalDetalles = new ArrayList<>();
+
+        //TODO: Armar esta funcion para que obtenga los datos de los medicamentos se busquen en la base de datos
+
+        jsonReceta.get("medicamentos").forEach( medicamentoJson -> {
             MedicamentoModel medicamento = new MedicamentoModel(
                     medicamentoJson.get("nombreComercial").asText(),
-                    medicamentoJson.get("nombreGenerico").asText(),
-                    medicamentoJson.get("cantidad").asInt()
+                    medicamentoJson.get("nombreGenerico").asText()
             );
-            medicamentos.add(medicamento);
+
+            RecetaDigitalDetalleModel detalle = new RecetaDigitalDetalleModel(
+                    medicamentoJson.get("cantidad").asInt(),
+                    medicamento
+            );
+
+            recetaDigitalDetalles.add(detalle);
         });
 
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
-            date = formatter.parse(json.get("fecha").asText());
+            date = formatter.parse(jsonReceta.get("fecha").asText());
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
         RecetaDigitalModel recetaDigital = new RecetaDigitalModel(
                 date,
-                json.get("descripcion").asText(),
-                medicamentos
+                jsonReceta.get("descripcion").asText(),
+                recetaDigitalDetalles
         );
 
         return Optional.of(recetaDigital);

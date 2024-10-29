@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table(name = "medicamentos")
+@Table(name = "medicamento")
 public class MedicamentoModel {
 
     @Id
@@ -17,15 +17,10 @@ public class MedicamentoModel {
     @Column
     private String nombreGenerico;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_evolucion")
-    private EvolucionModel evolucion;
-
-    private Integer cantidad;
-
-    public MedicamentoModel(String nombreComercial, String nombreGenerico, Integer cantidad) {
-        this.cantidad = cantidad;
+    public MedicamentoModel(String nombreComercial, String nombreGenerico) {
         this.nombreComercial = nombreComercial;
         this.nombreGenerico = nombreGenerico;
     }
+
+    public MedicamentoModel(){}
 }
