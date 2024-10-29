@@ -169,11 +169,17 @@ public class ClinicaRestController {
     }
 
     @PutMapping("/paciente/{idPaciente}")
-    public ResponseEntity<ApiResponse<String>> editarPaciente(@PathVariable String idPaciente, @RequestBody JsonNode jsonPaciente){
-
-
-        try{
+    public ResponseEntity<ApiResponse<String>> editarPaciente(@PathVariable String idPaciente, @RequestBody JsonNode jsonPaciente) {
+        try {
             PacienteModel paciente = JsonParser.pacienteDesdeJson(jsonPaciente);
+
+            if (!paciente.getDni().equals(idPaciente)) {
+                ApiResponse<String> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+                        "El ID del paciente en la URL no coincide con el ID en los datos proporcionados.",
+                        null);
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+
             String respuesta = sistemaClinica.editarPaciente(paciente);
 
             ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(),
@@ -182,7 +188,6 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-
             ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "Error al editar paciente: " + e.getMessage(),
                     null);
@@ -190,6 +195,7 @@ public class ClinicaRestController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
 }
