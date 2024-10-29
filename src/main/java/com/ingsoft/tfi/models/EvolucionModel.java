@@ -28,14 +28,14 @@ public class EvolucionModel {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_receta")
-    private Optional<RecetaDigitalModel> recetaDigital;
+    private RecetaDigitalModel recetaDigital;
 
     public EvolucionModel(String informe, Date fecha, MedicoModel medico, Optional<RecetaDigitalModel> recetaDigital) {
         this.informe = informe;
         this.fecha = fecha;
         this.medico = medico;
         if(recetaDigital.isPresent()){
-            this.recetaDigital = recetaDigital;
+            this.recetaDigital = recetaDigital.get();
         }
     }
 
@@ -47,7 +47,7 @@ public class EvolucionModel {
         return this.informe.equals(informe) && this.medico.equals(medico);
     }
 
-    public Optional<RecetaDigitalModel> getRecetaDigital(){ return recetaDigital; }
+    public RecetaDigitalModel getRecetaDigital(){ return recetaDigital; }
 
     public DiagnosticoModel getDiagnostico() {
         return diagnostico;

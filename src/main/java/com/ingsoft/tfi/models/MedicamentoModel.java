@@ -1,12 +1,10 @@
 package com.ingsoft.tfi.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
-import java.util.Date;
 
+@Entity
+@Table(name = "medicamentos")
 public class MedicamentoModel {
 
     @Id
@@ -18,6 +16,10 @@ public class MedicamentoModel {
 
     @Column
     private String nombreGenerico;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_evolucion")
+    private EvolucionModel evolucion;
 
     private Integer cantidad;
 

@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class JsonParser {
 
@@ -28,9 +29,9 @@ public class JsonParser {
         return json.get("informe").asText("");
     }
 
-    public static RecetaDigitalModel recetaDigitalDesdeJson(JsonNode json){
+    public static Optional<RecetaDigitalModel> recetaDigitalDesdeJson(JsonNode json){
         if (!json.has("receta")) {
-            return new RecetaDigitalModel();
+            return Optional.empty();
         }
 
         List<MedicamentoModel> medicamentos = new ArrayList<>();
@@ -58,7 +59,7 @@ public class JsonParser {
                 medicamentos
         );
 
-        return recetaDigital;
+        return Optional.of(recetaDigital);
     }
 
     public static JsonNode pacienteAJson(PacienteModel paciente){

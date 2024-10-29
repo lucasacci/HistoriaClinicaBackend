@@ -18,10 +18,7 @@ public class RecetaDigitalModel {
     @Column
     private String descripcion;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_evolucion")
-    private EvolucionModel evolucion;
-
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "id_medicamentos")
     private List<MedicamentoModel> medicamentos;
 
     public RecetaDigitalModel(Date fecha, String descripcion, List<MedicamentoModel> medicamentos) {

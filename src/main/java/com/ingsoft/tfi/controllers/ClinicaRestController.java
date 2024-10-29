@@ -43,11 +43,13 @@ public class ClinicaRestController {
                                              @PathVariable Long idDiagnostico,
                                              @RequestBody JsonNode json){
 
-        var paciente = this.sistemaClinica.agregarEvolucion(medicoPrueba,
+        var paciente = this.sistemaClinica.agregarEvolucion(
+                medicoPrueba,
                 dniPaciente,
                 idDiagnostico,
                 JsonParser.informeDesdeJson(json),
-                Optional.of(JsonParser.recetaDigitalDesdeJson(json)));
+                JsonParser.recetaDigitalDesdeJson(json)
+        );
         return new ResponseEntity<>(JsonParser.pacienteAJson(paciente), HttpStatus.CREATED);
     }
 

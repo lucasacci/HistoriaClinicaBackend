@@ -18,10 +18,10 @@ public class SistemaClinica {
         this.pacienteService = pacienteService;
     }
 
-    public PacienteModel agregarEvolucion(MedicoModel medico, String dniPaciente, Long diagnosticoElegido, String informe){
+    public PacienteModel agregarEvolucion(MedicoModel medico, String dniPaciente, Long diagnosticoElegido, String informe, Optional<RecetaDigitalModel> recetaDigital){
         PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
 
-        paciente.agregarEvolucion(diagnosticoElegido, medico, informe, );
+        paciente.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital);
 
         pacienteService.actualizarPaciente(paciente);
         return paciente;
