@@ -44,10 +44,13 @@ public class ClinicaRestController {
                                              @RequestBody JsonNode json){
 
         try {
-            var paciente = this.sistemaClinica.agregarEvolucion(medicoPrueba,
+            var paciente = this.sistemaClinica.agregarEvolucion(
+                    medicoPrueba,
                     dniPaciente,
                     idDiagnostico,
-                    JsonParser.informeDesdeJson(json));
+                    JsonParser.informeDesdeJson(json),
+                    JsonParser.recetaDigitalDesdeJson(json)
+            );
             ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.CREATED.value(),
                     "Evolución agregada exitosamente.",
                     JsonParser.pacienteAJson(paciente));

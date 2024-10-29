@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "diagnosticos")
@@ -41,9 +42,9 @@ public class DiagnosticoModel {
         return evoluciones.stream().anyMatch(evolucion -> evolucion.tiene(medico, informe));
     }
 
-    public void agregarEvolucion(MedicoModel medico, String informe) {
+    public void agregarEvolucion(MedicoModel medico, String informe, Optional<RecetaDigitalModel> recetaDigital) {
         Timestamp fechaEvolucion = new Timestamp(new Date().getTime());
-        EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico);
+        EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital);
 
         evolucion.setDiagnostico(this);
         evoluciones.add(evolucion);

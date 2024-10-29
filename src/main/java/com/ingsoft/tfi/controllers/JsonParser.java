@@ -3,18 +3,23 @@ package com.ingsoft.tfi.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ingsoft.tfi.models.*;
 import jdk.jshell.Diag;
+import org.springframework.cache.support.NullValue;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class JsonParser {
 
@@ -22,6 +27,48 @@ public class JsonParser {
 
     public static String informeDesdeJson(JsonNode json){
         return json.get("informe").asText("");
+    }
+
+    public static Optional<RecetaDigitalModel> recetaDigitalDesdeJson(JsonNode json){
+        if (!json.has("receta")) {
+            return Optional.empty();
+        }
+
+        JsonNode jsonReceta = json.get("receta");
+
+        List<RecetaDigitalDetalleModel> recetaDigitalDetalles = new ArrayList<>();
+
+        //TODO: Armar esta funcion para que obtenga los datos de los medicamentos se busquen en la base de datos
+
+        jsonReceta.get("medicamentos").forEach( medicamentoJson -> {
+            MedicamentoModel medicamento = new MedicamentoModel(
+                    medicamentoJson.get("nombreComercial").asText(),
+                    medicamentoJson.get("nombreGenerico").asText()
+            );
+
+            RecetaDigitalDetalleModel detalle = new RecetaDigitalDetalleModel(
+                    medicamentoJson.get("cantidad").asInt(),
+                    medicamento
+            );
+
+            recetaDigitalDetalles.add(detalle);
+        });
+
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = formatter.parse(jsonReceta.get("fecha").asText());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        RecetaDigitalModel recetaDigital = new RecetaDigitalModel(
+                date,
+                jsonReceta.get("descripcion").asText(),
+                recetaDigitalDetalles
+        );
+
+        return Optional.of(recetaDigital);
     }
 
     public static JsonNode pacienteAJson(PacienteModel paciente){
@@ -76,7 +123,6 @@ public class JsonParser {
 
         return json;
     }
-
 
     public static PacienteModel pacienteDesdeJson(JsonNode json) {
 
