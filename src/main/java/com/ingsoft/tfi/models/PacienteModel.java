@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "pacientes")
@@ -43,8 +44,8 @@ public class PacienteModel extends PersonaModel{
         return this.historiaClinica.buscarDiagnostico(idDiagnostico);
     }
 
-    public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe){
-        this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe);
+    public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe, Optional<RecetaDigitalModel> recetaDigital){
+        this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital);
     }
 
     public Long getId_paciente() {

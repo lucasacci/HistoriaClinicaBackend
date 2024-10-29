@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
@@ -47,10 +48,10 @@ public class HistoriaClinicaModel {
                 .orElseThrow(() -> new RuntimeException("diagnostico no encontrado"));
     }
 
-    public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe) {
+    public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe, Optional<RecetaDigitalModel> recetaDigital) {
         DiagnosticoModel diagnostico = buscarDiagnostico(diagnosticoElegido);
         if (diagnostico != null) {
-            diagnostico.agregarEvolucion(medico, informe);
+            diagnostico.agregarEvolucion(medico, informe, recetaDigital);
         } else {
             throw new RuntimeException("Diagnóstico no encontrado");
         }
