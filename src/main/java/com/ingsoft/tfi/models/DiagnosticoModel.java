@@ -22,7 +22,7 @@ public class DiagnosticoModel {
     @JoinColumn(name = "id_historia_clinica")
     private HistoriaClinicaModel historiaClinica;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "diagnostico")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "diagnostico", orphanRemoval = true)
     private List<EvolucionModel> evoluciones;
 
     public DiagnosticoModel(String descripcion) {
@@ -31,23 +31,32 @@ public class DiagnosticoModel {
     }
 
     public DiagnosticoModel() {
-
+        this.evoluciones = new ArrayList<>(); // Inicialización para evitar null
     }
 
     public boolean existeDiagnostico(Long id) {
         return this.id.equals(id);
     }
 
-    public boolean tieneEvolucion(MedicoModel medico, String informe){
-        return evoluciones.stream().anyMatch(evolucion -> evolucion.tiene(medico, informe));
-    }
+//    public boolean tieneEvolucion(MedicoModel medico, String informe){
+//        return evoluciones.stream().anyMatch(evolucion -> evolucion.tiene(medico, informe));
+//    }
 
     public void agregarEvolucion(MedicoModel medico, String informe, Optional<RecetaDigitalModel> recetaDigital) {
         Timestamp fechaEvolucion = new Timestamp(new Date().getTime());
         EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital);
-
         evolucion.setDiagnostico(this);
         evoluciones.add(evolucion);
+    }
+
+    public void eliminarEvolucion(Long idEvolucion) {
+        EvolucionModel evolucion = evoluciones.stream()
+                .filter(evolucionModel -> evolucionModel.getId_evolucion().equals(idEvolucion))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Evolución no encontrada"));
+
+        evoluciones.remove(evolucion);
+        System.out.println("Evolucion eliminada: " + idEvolucion);
     }
 
     public Long getId() {
