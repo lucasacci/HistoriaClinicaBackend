@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +48,28 @@ public class ClinicaRestController {
                 idDiagnostico,
                 JsonParser.informeDesdeJson(json));
         return new ResponseEntity<>(JsonParser.pacienteAJson(paciente), HttpStatus.CREATED);
+    }
+
+//    @DeleteMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion")
+//    public ResponseEntity<JsonNode> eliminarEvolucion(@PathVariable String dniPaciente,
+//                                                     @PathVariable Long idDiagnostico,
+//                                                     @RequestBody JsonNode json){
+//
+//        var paciente = this.sistemaClinica.eliminarEvolucion(medicoPrueba,
+//                dniPaciente,
+//                idDiagnostico,
+//                JsonParser.informeDesdeJson(json));
+//        return new ResponseEntity<>(JsonParser.pacienteAJson(paciente), HttpStatus.CREATED);
+//    }
+
+    @GetMapping("/paciente")
+    public ResponseEntity<List<JsonNode>> getPacientes(){
+        List<PacienteModel> pacientes = sistemaClinica.getPacientes();
+        List<JsonNode> pacientesJson = new ArrayList<>();
+        pacientes.forEach(pacienteModel -> {pacientesJson.add(JsonParser.pacienteAJson(pacienteModel));});
+
+
+        return new ResponseEntity<>(pacientesJson, HttpStatus.CREATED);
     }
 
     @GetMapping("/paciente/{dniPaciente}")

@@ -77,6 +77,7 @@ public class JsonParser {
         return json;
     }
 
+
     public static PacienteModel pacienteDesdeJson(JsonNode json) {
 
         String nombre = json.get("nombre").asText();
