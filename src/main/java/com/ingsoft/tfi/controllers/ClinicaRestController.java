@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class ClinicaRestController {
@@ -40,12 +39,13 @@ public class ClinicaRestController {
 
 
     @PostMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion")
-    public ResponseEntity<JsonNode> agregarEvolucion(@PathVariable String dniPaciente,
+    public ResponseEntity<ApiResponse<?>> agregarEvolucion(@PathVariable String dniPaciente,
                                              @PathVariable Long idDiagnostico,
                                              @RequestBody JsonNode json){
 
         try {
-            var paciente = this.sistemaClinica.agregarEvolucion(medicoPrueba,
+            var paciente = this.sistemaClinica.agregarEvolucion(
+                    medicoPrueba,
                     dniPaciente,
                     idDiagnostico,
                     JsonParser.informeDesdeJson(json),
