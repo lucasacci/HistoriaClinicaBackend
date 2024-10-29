@@ -65,17 +65,29 @@ public class ClinicaRestController {
         }
     }
 
-//    @DeleteMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion")
-//    public ResponseEntity<JsonNode> eliminarEvolucion(@PathVariable String dniPaciente,
-//                                                     @PathVariable Long idDiagnostico,
-//                                                     @RequestBody JsonNode json){
-//
-//        var paciente = this.sistemaClinica.eliminarEvolucion(medicoPrueba,
-//                dniPaciente,
-//                idDiagnostico,
-//                JsonParser.informeDesdeJson(json));
-//        return new ResponseEntity<>(JsonParser.pacienteAJson(paciente), HttpStatus.CREATED);
-//    }
+    @DeleteMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion/{idEvolucion}")
+    public ResponseEntity<ApiResponse<?>> eliminarEvolucion(@PathVariable String dniPaciente,
+                                                     @PathVariable Long idDiagnostico,
+                                                     @PathVariable Long idEvolucion){
+
+        try {
+                this.sistemaClinica.eliminarEvolucion(dniPaciente,
+                    idDiagnostico,
+                    idEvolucion);
+
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(),
+                    "Evolucion eliminada exitosamente.",
+                    null);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Error al eliminar evolucion: " + e.getMessage(),
+                    null);
+
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/paciente/{dniPaciente}/diagnostico")
     public ResponseEntity<ApiResponse<String>> agregarDiagnostico(@PathVariable String dniPaciente, @RequestBody JsonNode json) {
@@ -102,7 +114,6 @@ public class ClinicaRestController {
     public ResponseEntity<ApiResponse<?>> getPacientes(){
         List<PacienteModel> pacientes = sistemaClinica.getPacientes();
         List<JsonNode> pacientesJson = new ArrayList<>();
-
 
         try{
             pacientes.forEach(pacienteModel -> {pacientesJson.add(JsonParser.pacienteAJson(pacienteModel));});

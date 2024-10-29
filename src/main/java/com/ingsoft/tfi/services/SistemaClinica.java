@@ -1,6 +1,7 @@
 package com.ingsoft.tfi.services;
 
 
+import com.ingsoft.tfi.models.DiagnosticoModel;
 import com.ingsoft.tfi.models.MedicoModel;
 import com.ingsoft.tfi.models.PacienteModel;
 import com.ingsoft.tfi.models.RecetaDigitalModel;
@@ -55,6 +56,13 @@ public class SistemaClinica {
 
         paciente.agregarDiagnostico(diagnostico);
 
+        pacienteService.actualizarPaciente(paciente);
+    }
+
+    public void eliminarEvolucion(String dniPaciente, Long idDiagnostico, Long idEvolucion) {
+        PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
+        DiagnosticoModel diagnostico = paciente.buscarDiagnostico(idDiagnostico);
+        diagnostico.eliminarEvolucion(idEvolucion);
         pacienteService.actualizarPaciente(paciente);
     }
 }

@@ -81,10 +81,4 @@ public class PacienteService {
 
         return pacientes;
     }
-
-    public void agregarDiagnostico(String dniPaciente, String diagnostico) {
-        if(buscarPaciente(dniPaciente).isPresent()){
-
-        }
-    }
 }

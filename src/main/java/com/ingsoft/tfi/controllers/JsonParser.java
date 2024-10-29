@@ -117,6 +117,7 @@ public class JsonParser {
                 .withZone(ZoneId.systemDefault());
         String formattedDate = formatter.format(instant);
 
+        json.put("id_evolucion", evolucion.getId_evolucion());
         json.put("informe", evolucion.getInforme());
         json.put("doctor", evolucion.getMedico().getNombre());
         json.put("fecha", formattedDate);
@@ -178,7 +179,7 @@ public class JsonParser {
             });
         }
 
-        historiaClinica.setDiagnosticos(diagnosticos); // Asigna la lista completa de diagnósticos a la historia clínica
+        historiaClinica.setDiagnosticos(diagnosticos);
         return historiaClinica;
     }
 
