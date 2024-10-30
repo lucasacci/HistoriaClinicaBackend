@@ -17,9 +17,13 @@ public class MedicamentoModel {
     @Column
     private String nombreGenerico;
 
-    public MedicamentoModel(String nombreComercial, String nombreGenerico) {
+    @Column
+    private String presentacion;
+
+    public MedicamentoModel(String nombreComercial, String nombreGenerico, String presentacion) {
         this.nombreComercial = nombreComercial;
         this.nombreGenerico = nombreGenerico;
+        this.presentacion = presentacion;
     }
 
     public MedicamentoModel(){}

@@ -21,4 +21,20 @@ public class PedidoLaboratorioModel {
     public PedidoLaboratorioModel() {
 
     }
+
+    public int getId_pedido_laboratorio() {
+        return id_pedido_laboratorio;
+    }
+
+    public void setId_pedido_laboratorio(int id_pedido_laboratorio) {
+        this.id_pedido_laboratorio = id_pedido_laboratorio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 }

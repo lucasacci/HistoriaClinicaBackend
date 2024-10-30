@@ -49,7 +49,8 @@ public class JsonParser {
         jsonReceta.get("medicamentos").forEach( medicamentoJson -> {
             MedicamentoModel medicamento = new MedicamentoModel(
                     medicamentoJson.get("nombreComercial").asText(),
-                    medicamentoJson.get("nombreGenerico").asText()
+                    medicamentoJson.get("nombreGenerico").asText(),
+                    medicamentoJson.get("presentacion").asText()
             );
 
             RecetaDigitalDetalleModel detalle = new RecetaDigitalDetalleModel(
@@ -68,12 +69,6 @@ public class JsonParser {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
-        /*RecetaDigitalModel recetaDigital = new RecetaDigitalModel(
-                date,
-                jsonReceta.get("descripcion").asText(),
-                recetaDigitalDetalles
-        );*/
 
         receteDigitalCabecera.setFecha(date);
         receteDigitalCabecera.setDescripcion(jsonReceta.get("descripcion").asText());
@@ -151,6 +146,18 @@ public class JsonParser {
         if (evolucion.getRecetaDigital() != null) {
             json.set("receta", recetaDigitalAJson(evolucion.getRecetaDigital()));
         }
+
+        if (evolucion.getPedidoLaboratorio() != null) {
+            json.set("pedidoLaboratorio", pedidoLaboratorioAJson(evolucion.getPedidoLaboratorio()));
+        }
+
+        return json;
+    }
+
+    private static JsonNode pedidoLaboratorioAJson(PedidoLaboratorioModel pedidoLaboratorio) {
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("descripcion", pedidoLaboratorio.getDescripcion());
 
         return json;
     }
