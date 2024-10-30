@@ -18,7 +18,7 @@ public class RecetaDigitalModel {
     @Column
     private String descripcion;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "id_receta_digital_detalle")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "recetaDigital")
     private List<RecetaDigitalDetalleModel> recetaDigitaldetalle;
 
     public RecetaDigitalModel(Date fecha, String descripcion, List<RecetaDigitalDetalleModel> recetaDigitalDetalle) {

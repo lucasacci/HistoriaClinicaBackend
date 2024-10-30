@@ -40,6 +40,8 @@ public class JsonParser {
 
         //TODO: Armar esta funcion para que obtenga los datos de los medicamentos se busquen en la base de datos
 
+        RecetaDigitalModel receteDigitalCabecera = new RecetaDigitalModel();
+
         jsonReceta.get("medicamentos").forEach( medicamentoJson -> {
             MedicamentoModel medicamento = new MedicamentoModel(
                     medicamentoJson.get("nombreComercial").asText(),
@@ -48,7 +50,8 @@ public class JsonParser {
 
             RecetaDigitalDetalleModel detalle = new RecetaDigitalDetalleModel(
                     medicamentoJson.get("cantidad").asInt(),
-                    medicamento
+                    medicamento,
+                    receteDigitalCabecera
             );
 
             recetaDigitalDetalles.add(detalle);
@@ -62,13 +65,17 @@ public class JsonParser {
             throw new RuntimeException(e);
         }
 
-        RecetaDigitalModel recetaDigital = new RecetaDigitalModel(
+        /*RecetaDigitalModel recetaDigital = new RecetaDigitalModel(
                 date,
                 jsonReceta.get("descripcion").asText(),
                 recetaDigitalDetalles
-        );
+        );*/
 
-        return Optional.of(recetaDigital);
+        receteDigitalCabecera.setFecha(date);
+        receteDigitalCabecera.setDescripcion(jsonReceta.get("descripcion").asText());
+        receteDigitalCabecera.setRecetaDigitaldetalle(recetaDigitalDetalles);
+
+        return Optional.of(receteDigitalCabecera);
     }
 
     public static Optional<PedidoLaboratorioModel> pedidoLaboratorioDesdeJson(JsonNode json){
@@ -152,7 +159,7 @@ public class JsonParser {
         json.put("descripcion", recetaDigital.getDescripcion());
 
         recetaDigital.getRecetaDigitaldetalle().forEach(receta -> {
-            array.add(recetaDigitalDetalleAJson(receta));
+            array.add(MedicamentoAJson(receta));
         });
 
         json.set("medicamentos", array);
@@ -160,7 +167,7 @@ public class JsonParser {
         return json;
     }
 
-    private static JsonNode recetaDigitalDetalleAJson(RecetaDigitalDetalleModel recetaDetalle) {
+    private static JsonNode MedicamentoAJson(RecetaDigitalDetalleModel recetaDetalle) {
         ObjectNode json = mapper.createObjectNode();
 
         json.put("nombreComercial", recetaDetalle.getMedicamento().getNombreComercial());

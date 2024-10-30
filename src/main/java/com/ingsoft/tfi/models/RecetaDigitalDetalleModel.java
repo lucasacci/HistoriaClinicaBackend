@@ -9,7 +9,7 @@ public class RecetaDigitalDetalleModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_receta_digital_detalle;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_receta_digital")
     private RecetaDigitalModel recetaDigital;
 
@@ -20,9 +20,10 @@ public class RecetaDigitalDetalleModel {
     @Column
     private Integer cantidad;
 
-    public RecetaDigitalDetalleModel(Integer cantidad, MedicamentoModel medicamento){
+    public RecetaDigitalDetalleModel(Integer cantidad, MedicamentoModel medicamento, RecetaDigitalModel recetaDigital){
         this.medicamento = medicamento;
         this.cantidad = cantidad;
+        this.recetaDigital = recetaDigital;
     }
 
     public RecetaDigitalDetalleModel() {}
