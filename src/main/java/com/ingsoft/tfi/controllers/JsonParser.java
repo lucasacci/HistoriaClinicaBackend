@@ -33,9 +33,9 @@ public class JsonParser {
         return json.get("informe").asText("");
     }
 
-    public static Optional<RecetaDigitalModel> recetaDigitalDesdeJson(JsonNode json){
+    public static RecetaDigitalModel recetaDigitalDesdeJson(JsonNode json){
         if (!json.has("receta")) {
-            return Optional.empty();
+            return null;
         }
 
         JsonNode jsonReceta = json.get("receta");
@@ -74,12 +74,12 @@ public class JsonParser {
         receteDigitalCabecera.setDescripcion(jsonReceta.get("descripcion").asText());
         receteDigitalCabecera.setRecetaDigitaldetalle(recetaDigitalDetalles);
 
-        return Optional.of(receteDigitalCabecera);
+        return receteDigitalCabecera;
     }
 
-    public static Optional<PedidoLaboratorioModel> pedidoLaboratorioDesdeJson(JsonNode json){
+    public static PedidoLaboratorioModel pedidoLaboratorioDesdeJson(JsonNode json){
         if (!json.has("pedidoLaboratorio")) {
-            return Optional.empty();
+            return null;
         }
 
         JsonNode jsonPedidoLab = json.get("pedidoLaboratorio");
@@ -88,7 +88,7 @@ public class JsonParser {
                 jsonPedidoLab.get("descripcion").asText()
         );
 
-        return Optional.of(pedidoLaboratorio);
+        return pedidoLaboratorio;
     }
 
 

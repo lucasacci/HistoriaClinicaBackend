@@ -35,21 +35,24 @@ public class EvolucionModel {
     private PedidoLaboratorioModel pedidoLaboratorio;
 
     public EvolucionModel(String informe, Date fecha, MedicoModel medico,
-                          Optional<RecetaDigitalModel> recetaDigital, Optional<PedidoLaboratorioModel> pedidoLaboratorio) {
+                          RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
         this.informe = informe;
         this.fecha = fecha;
         this.medico = medico;
 
-        if(recetaDigital.isPresent() && pedidoLaboratorio.isPresent()) {
+        var posibleReceta = Optional.ofNullable(recetaDigital);
+        var posiblePedidoLab = Optional.ofNullable(pedidoLaboratorio);
+
+        if(posibleReceta.isPresent() && posiblePedidoLab.isPresent()) {
             throw new IllegalArgumentException("No se puede crear una evolución con receta y con pedido de laboratorio");
         }
 
-        if(recetaDigital.isPresent()){
-            this.recetaDigital = recetaDigital.get();
+        if(posibleReceta.isPresent()){
+            this.recetaDigital = recetaDigital;
         }
 
-        if(pedidoLaboratorio.isPresent()){
-            this.pedidoLaboratorio = pedidoLaboratorio.get();
+        if(posiblePedidoLab.isPresent()){
+            this.pedidoLaboratorio = pedidoLaboratorio;
         }
     }
 
