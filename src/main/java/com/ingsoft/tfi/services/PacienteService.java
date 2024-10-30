@@ -30,6 +30,7 @@ public class PacienteService {
         return repositorioPaciente.findByDni(dniPaciente);
     }
 
+
     public String agregarPaciente(PacienteModel paciente) {
         try {
             if (buscarPaciente(paciente.getDni()).isPresent()) {
@@ -55,7 +56,6 @@ public class PacienteService {
             return "Paciente no encontrado, DNI: " + dniPaciente;
         }
     }
-
 
 
 

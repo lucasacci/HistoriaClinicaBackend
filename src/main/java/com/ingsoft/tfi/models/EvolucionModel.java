@@ -18,7 +18,7 @@ public class EvolucionModel {
     @Column
     public String informe;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id_diagnostico")
     private DiagnosticoModel diagnostico;
 

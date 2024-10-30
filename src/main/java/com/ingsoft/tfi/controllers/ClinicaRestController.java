@@ -39,10 +39,9 @@ public class ClinicaRestController {
 
 
     @PostMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion")
-    public ResponseEntity<ApiResponse<JsonNode>> agregarEvolucion(@PathVariable String dniPaciente,
+    public ResponseEntity<JsonNode> agregarEvolucion(@PathVariable String dniPaciente,
                                              @PathVariable Long idDiagnostico,
                                              @RequestBody JsonNode json){
-
         try {
             var paciente = this.sistemaClinica.agregarEvolucion(
                     medicoPrueba,
@@ -52,23 +51,28 @@ public class ClinicaRestController {
                     JsonParser.recetaDigitalDesdeJson(json),
                     JsonParser.pedidoLaboratorioDesdeJson(json)
             );
+            paciente.getHistoriaClinica().getDiagnosticos().forEach(e-> e.getEvoluciones().forEach(x -> System.out.println(x.getFecha())));
             ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.CREATED.value(),
                     "Evolución agregada exitosamente.",
                     JsonParser.pacienteAJson(paciente));
 
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception e) {
             ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
-                    "Error al agregar la evolución",
-                    JsonParser.exJsonNode(e.getMessage())
+                    "Error al agregar la evolución" + e.getMessage(),
+                    null
             );
 
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion/{idEvolucion}")
-    public ResponseEntity<ApiResponse<?>> eliminarEvolucion(@PathVariable String dniPaciente,
+    public ResponseEntity<JsonNode> eliminarEvolucion(@PathVariable String dniPaciente,
                                                      @PathVariable Long idDiagnostico,
                                                      @PathVariable Long idEvolucion){
 
@@ -77,152 +81,185 @@ public class ClinicaRestController {
                     idDiagnostico,
                     idEvolucion);
 
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.CREATED.value(),
                     "Evolucion eliminada exitosamente.",
                     null);
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.CREATED.value(),
                     "Error al eliminar evolucion: " + e.getMessage(),
                     null);
 
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/paciente/{dniPaciente}/diagnostico")
-    public ResponseEntity<ApiResponse<String>> agregarDiagnostico(@PathVariable String dniPaciente, @RequestBody JsonNode json) {
+    public ResponseEntity<JsonNode> agregarDiagnostico(@PathVariable String dniPaciente, @RequestBody JsonNode json) {
         try {
             String descripcionDiagnostico = JsonParser.diagnosticoDesdeJson(json);
 
             sistemaClinica.agregarDiagnostico(dniPaciente, descripcionDiagnostico);
 
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.CREATED.value(),
                     "Diagnóstico agregado exitosamente.",
                     null);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.CREATED.value(),
                     "Error al agregar diagnóstico: " + e.getMessage(),
                     null);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
 
 
     @GetMapping("/paciente")
-    public ResponseEntity<ApiResponse<?>> getPacientes(){
+    public ResponseEntity<JsonNode> getPacientes() {
         List<PacienteModel> pacientes = sistemaClinica.getPacientes();
         List<JsonNode> pacientesJson = new ArrayList<>();
 
-        try{
-            pacientes.forEach(pacienteModel -> {pacientesJson.add(JsonParser.pacienteAJson(pacienteModel));});
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.CREATED.value(),
+        try {
+            pacientes.forEach(pacienteModel -> pacientesJson.add(JsonParser.pacienteAJson(pacienteModel)));
+
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.OK.value(),
                     "Obtener pacientes",
                     pacientesJson);
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
             ApiResponse<Void> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
                     "Error al obtener pacientes: " + e.getMessage(),
                     null);
 
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            JsonNode errorResponse = JsonParser.responseAJson(response);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @GetMapping("/paciente/{dniPaciente}")
-    public ResponseEntity<ApiResponse<?>> buscarPaciente(@PathVariable String dniPaciente){
+    public ResponseEntity<JsonNode> buscarPaciente(@PathVariable String dniPaciente){
 
         try{
             var paciente = this.sistemaClinica.buscarPaciente(dniPaciente);
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.FOUND.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
                     "Paciente encontrado",
                     JsonParser.pacienteAJson(paciente));
 
-            return new ResponseEntity<>(response, HttpStatus.FOUND);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.FOUND);
         } catch (Exception e) {
-            ApiResponse<Void> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(),
                     "Error al buscar el paciente: " + e.getMessage(),
                     null);
 
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping("/paciente")
-    public ResponseEntity<ApiResponse<?>> agregarPaciente(@RequestBody JsonNode jsonPaciente) {
+    public ResponseEntity<JsonNode> agregarPaciente(@RequestBody JsonNode jsonPaciente) {
 
 
         try{
             PacienteModel paciente = JsonParser.pacienteDesdeJson(jsonPaciente);
             String respuesta = sistemaClinica.agregarPaciente(paciente);
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.CREATED.value(),
-                     respuesta,
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+                    respuesta,
                     JsonParser.pacienteAJson(paciente));
 
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception e) {
 
             ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "Error al agregar el paciente: " + e.getMessage(),
                     null);
 
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
     @DeleteMapping("/paciente/{dniPaciente}")
-    public ResponseEntity<ApiResponse<String>> eliminarPaciente(@PathVariable String dniPaciente){
+    public ResponseEntity<JsonNode> eliminarPaciente(@PathVariable String dniPaciente){
 
             try{
                 String resultado = sistemaClinica.borrarPaciente(dniPaciente);
 
-                ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(),
+                ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
                         resultado,
                         null);
 
-                return new ResponseEntity<>(response, HttpStatus.OK);
+                JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+                return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
             } catch (Exception e) {
                 ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(),
                         "Error al borrar paciente: " + e.getMessage(),
                         null);
 
-                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+                JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+                return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
             }
     }
 
     @PutMapping("/paciente/{idPaciente}")
-    public ResponseEntity<ApiResponse<String>> editarPaciente(@PathVariable String idPaciente, @RequestBody JsonNode jsonPaciente) {
+    public ResponseEntity<JsonNode> editarPaciente(@PathVariable String idPaciente, @RequestBody JsonNode jsonPaciente) {
         try {
             PacienteModel paciente = JsonParser.pacienteDesdeJson(jsonPaciente);
 
             if (!paciente.getDni().equals(idPaciente)) {
-                ApiResponse<String> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+                ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
                         "El ID del paciente en la URL no coincide con el ID en los datos proporcionados.",
                         null);
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+                JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+                return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
             }
 
             String respuesta = sistemaClinica.editarPaciente(paciente);
 
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
                     respuesta,
                     null);
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "Error al editar paciente: " + e.getMessage(),
                     null);
 
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

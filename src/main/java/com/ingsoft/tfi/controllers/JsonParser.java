@@ -21,14 +21,12 @@ public class JsonParser {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    public static JsonNode exJsonNode(String exception) {
-        ObjectNode json = mapper.createObjectNode();
-
-        json.put("error", exception);
-
-        return json;
+    public static JsonNode responseAJson(ApiResponse<?> response) {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.valueToTree(response);
     }
-;
+
+    ;
     public static String informeDesdeJson(JsonNode json){
         return json.get("informe").asText("");
     }
@@ -133,7 +131,7 @@ public class JsonParser {
     public static JsonNode evolucionAJson(EvolucionModel evolucion){
         ObjectNode json = mapper.createObjectNode();
 
-        Instant instant = evolucion.getFecha().toInstant(); // date a instant
+        Instant instant = evolucion.getFecha().toInstant();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                 .withZone(ZoneId.systemDefault());
         String formattedDate = formatter.format(instant);
