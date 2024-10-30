@@ -13,7 +13,7 @@ public class MedicamentoService {
    // @Autowired
     IRepositorioMedicamento repositorioMedicamento;
 
-    public Optional<MedicamentoModel> buscarMedicamento(Integer Id){
+    public Optional<MedicamentoModel> buscarMedicamento(Long Id){
         return repositorioMedicamento.findById(Id);
     }
 

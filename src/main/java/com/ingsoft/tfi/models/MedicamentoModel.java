@@ -9,7 +9,7 @@ public class MedicamentoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_medicamento;
+    private Long id_medicamento;
 
     @Column
     private String nombreComercial;
@@ -28,11 +28,11 @@ public class MedicamentoModel {
 
     public MedicamentoModel(){}
 
-    public int getId_medicamento() {
+    public Long getId_medicamento() {
         return id_medicamento;
     }
 
-    public void setId_medicamento(int id_medicamento) {
+    public void setId_medicamento(Long id_medicamento) {
         this.id_medicamento = id_medicamento;
     }
 
