@@ -3,17 +3,13 @@ package com.ingsoft.tfi.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ingsoft.tfi.models.*;
-import jdk.jshell.Diag;
-import org.springframework.cache.support.NullValue;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,6 +21,14 @@ public class JsonParser {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    public static JsonNode exJsonNode(String exception) {
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("error", exception);
+
+        return json;
+    }
+;
     public static String informeDesdeJson(JsonNode json){
         return json.get("informe").asText("");
     }
@@ -72,7 +76,7 @@ public class JsonParser {
     }
 
     public static JsonNode pacienteAJson(PacienteModel paciente){
-        ObjectNode json= mapper.createObjectNode();
+        ObjectNode json = mapper.createObjectNode();
 
         json.put("nombre" , paciente.getNombre());
         json.put("apellido" , paciente.getApellido());
