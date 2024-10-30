@@ -49,7 +49,7 @@ public class HistoriaClinicaModel {
     }
 
     public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe,
-                                 Optional<RecetaDigitalModel> recetaDigital, Optional<PedidoLaboratorioModel> pedidoLaboratorio) {
+                                 RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
         DiagnosticoModel diagnostico = buscarDiagnostico(diagnosticoElegido);
         if (diagnostico != null) {
             diagnostico.agregarEvolucion(medico, informe, recetaDigital, pedidoLaboratorio);

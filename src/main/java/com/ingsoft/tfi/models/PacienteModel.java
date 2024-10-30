@@ -45,7 +45,7 @@ public class PacienteModel extends PersonaModel{
     }
 
     public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe,
-                                 Optional<RecetaDigitalModel> recetaDigital, Optional<PedidoLaboratorioModel> pedidoLaboratorio){
+                                 RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio){
         this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital, pedidoLaboratorio);
     }
 

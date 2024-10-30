@@ -43,7 +43,7 @@ public class DiagnosticoModel {
 //    }
 
     public void agregarEvolucion(MedicoModel medico, String informe,
-                                 Optional<RecetaDigitalModel> recetaDigital, Optional<PedidoLaboratorioModel> pedidoLaboratorio) {
+                                 RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
         Timestamp fechaEvolucion = new Timestamp(new Date().getTime());
         EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital, pedidoLaboratorio);
         evolucion.setDiagnostico(this);
