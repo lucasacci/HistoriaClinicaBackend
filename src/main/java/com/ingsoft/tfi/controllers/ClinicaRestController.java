@@ -39,7 +39,7 @@ public class ClinicaRestController {
 
 
     @PostMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion")
-    public ResponseEntity<ApiResponse<?>> agregarEvolucion(@PathVariable String dniPaciente,
+    public ResponseEntity<ApiResponse<JsonNode>> agregarEvolucion(@PathVariable String dniPaciente,
                                              @PathVariable Long idDiagnostico,
                                              @RequestBody JsonNode json){
 
@@ -58,9 +58,10 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e) {
-            ApiResponse<Void> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
-                    "Error al agregar la evolución: " + e.getMessage(),
-                    null);
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+                    "Error al agregar la evolución",
+                    JsonParser.exJsonNode(e.getMessage())
+            );
 
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
