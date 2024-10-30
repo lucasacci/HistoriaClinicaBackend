@@ -49,7 +49,8 @@ public class ClinicaRestController {
                     dniPaciente,
                     idDiagnostico,
                     JsonParser.informeDesdeJson(json),
-                    JsonParser.recetaDigitalDesdeJson(json)
+                    JsonParser.recetaDigitalDesdeJson(json),
+                    JsonParser.pedidoLaboratorioDesdeJson(json)
             );
             ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.CREATED.value(),
                     "Evolución agregada exitosamente.",

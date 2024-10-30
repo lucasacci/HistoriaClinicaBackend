@@ -30,12 +30,26 @@ public class EvolucionModel {
     @JoinColumn(name = "id_receta")
     private RecetaDigitalModel recetaDigital;
 
-    public EvolucionModel(String informe, Date fecha, MedicoModel medico, Optional<RecetaDigitalModel> recetaDigital) {
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_pedido_laboratorio")
+    private PedidoLaboratorioModel pedidoLaboratorio;
+
+    public EvolucionModel(String informe, Date fecha, MedicoModel medico,
+                          Optional<RecetaDigitalModel> recetaDigital, Optional<PedidoLaboratorioModel> pedidoLaboratorio) {
         this.informe = informe;
         this.fecha = fecha;
         this.medico = medico;
+
+        if(recetaDigital.isPresent() && pedidoLaboratorio.isPresent()) {
+            throw new IllegalArgumentException("No se puede crear una evolución con receta y con pedido de laboratorio");
+        }
+
         if(recetaDigital.isPresent()){
             this.recetaDigital = recetaDigital.get();
+        }
+
+        if(pedidoLaboratorio.isPresent()){
+            this.pedidoLaboratorio = pedidoLaboratorio.get();
         }
     }
 
@@ -47,7 +61,9 @@ public class EvolucionModel {
         return this.informe.equals(informe) && this.medico.equals(medico);
     }
 
-    public RecetaDigitalModel getRecetaDigital(){ return recetaDigital; }
+    public RecetaDigitalModel getRecetaDigital(){
+        return recetaDigital;
+    }
 
     public DiagnosticoModel getDiagnostico() {
         return diagnostico;
@@ -87,5 +103,9 @@ public class EvolucionModel {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public PedidoLaboratorioModel getPedidoLaboratorio() {
+        return pedidoLaboratorio;
     }
 }

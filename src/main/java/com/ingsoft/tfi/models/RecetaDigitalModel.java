@@ -18,7 +18,7 @@ public class RecetaDigitalModel {
     @Column
     private String descripcion;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "id_receta_digital_detalle")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "recetaDigital")
     private List<RecetaDigitalDetalleModel> recetaDigitaldetalle;
 
     public RecetaDigitalModel(Date fecha, String descripcion, List<RecetaDigitalDetalleModel> recetaDigitalDetalle) {
@@ -31,4 +31,35 @@ public class RecetaDigitalModel {
 
     }
 
+    public int getId_receta_digital() {
+        return id_receta_digital;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public List<RecetaDigitalDetalleModel> getRecetaDigitaldetalle() {
+        return recetaDigitaldetalle;
+    }
+
+    public void setId_receta_digital(int id_receta_digital) {
+        this.id_receta_digital = id_receta_digital;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setRecetaDigitaldetalle(List<RecetaDigitalDetalleModel> recetaDigitaldetalle) {
+        this.recetaDigitaldetalle = recetaDigitaldetalle;
+    }
 }

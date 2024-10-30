@@ -44,15 +44,19 @@ public class JsonParser {
 
         //TODO: Armar esta funcion para que obtenga los datos de los medicamentos se busquen en la base de datos
 
+        RecetaDigitalModel receteDigitalCabecera = new RecetaDigitalModel();
+
         jsonReceta.get("medicamentos").forEach( medicamentoJson -> {
             MedicamentoModel medicamento = new MedicamentoModel(
                     medicamentoJson.get("nombreComercial").asText(),
-                    medicamentoJson.get("nombreGenerico").asText()
+                    medicamentoJson.get("nombreGenerico").asText(),
+                    medicamentoJson.get("presentacion").asText()
             );
 
             RecetaDigitalDetalleModel detalle = new RecetaDigitalDetalleModel(
                     medicamentoJson.get("cantidad").asInt(),
-                    medicamento
+                    medicamento,
+                    receteDigitalCabecera
             );
 
             recetaDigitalDetalles.add(detalle);
@@ -66,14 +70,27 @@ public class JsonParser {
             throw new RuntimeException(e);
         }
 
-        RecetaDigitalModel recetaDigital = new RecetaDigitalModel(
-                date,
-                jsonReceta.get("descripcion").asText(),
-                recetaDigitalDetalles
+        receteDigitalCabecera.setFecha(date);
+        receteDigitalCabecera.setDescripcion(jsonReceta.get("descripcion").asText());
+        receteDigitalCabecera.setRecetaDigitaldetalle(recetaDigitalDetalles);
+
+        return Optional.of(receteDigitalCabecera);
+    }
+
+    public static Optional<PedidoLaboratorioModel> pedidoLaboratorioDesdeJson(JsonNode json){
+        if (!json.has("pedidoLaboratorio")) {
+            return Optional.empty();
+        }
+
+        JsonNode jsonPedidoLab = json.get("pedidoLaboratorio");
+
+        PedidoLaboratorioModel pedidoLaboratorio = new PedidoLaboratorioModel(
+                jsonPedidoLab.get("descripcion").asText()
         );
 
-        return Optional.of(recetaDigital);
+        return Optional.of(pedidoLaboratorio);
     }
+
 
     public static JsonNode pacienteAJson(PacienteModel paciente){
         ObjectNode json = mapper.createObjectNode();
@@ -125,6 +142,48 @@ public class JsonParser {
         json.put("informe", evolucion.getInforme());
         json.put("doctor", evolucion.getMedico().getNombre());
         json.put("fecha", formattedDate);
+
+        if (evolucion.getRecetaDigital() != null) {
+            json.set("receta", recetaDigitalAJson(evolucion.getRecetaDigital()));
+        }
+
+        if (evolucion.getPedidoLaboratorio() != null) {
+            json.set("pedidoLaboratorio", pedidoLaboratorioAJson(evolucion.getPedidoLaboratorio()));
+        }
+
+        return json;
+    }
+
+    private static JsonNode pedidoLaboratorioAJson(PedidoLaboratorioModel pedidoLaboratorio) {
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("descripcion", pedidoLaboratorio.getDescripcion());
+
+        return json;
+    }
+
+    private static JsonNode recetaDigitalAJson(RecetaDigitalModel recetaDigital) {
+        ObjectNode json = mapper.createObjectNode();
+        ArrayNode array = mapper.createArrayNode();
+
+        json.put("fecha", recetaDigital.getFecha().toString());
+        json.put("descripcion", recetaDigital.getDescripcion());
+
+        recetaDigital.getRecetaDigitaldetalle().forEach(receta -> {
+            array.add(MedicamentoAJson(receta));
+        });
+
+        json.set("medicamentos", array);
+
+        return json;
+    }
+
+    private static JsonNode MedicamentoAJson(RecetaDigitalDetalleModel recetaDetalle) {
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("nombreComercial", recetaDetalle.getMedicamento().getNombreComercial());
+        json.put("nombreGenerico", recetaDetalle.getMedicamento().getNombreGenerico());
+        json.put("cantidad", recetaDetalle.getCantidad());
 
         return json;
     }
