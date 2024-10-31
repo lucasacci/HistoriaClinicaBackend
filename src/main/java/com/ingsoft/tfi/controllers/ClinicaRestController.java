@@ -71,6 +71,42 @@ public class ClinicaRestController {
         }
     }
 
+    @PutMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion/{idEvolucion}")
+    public ResponseEntity<JsonNode> editarEvolucion(@PathVariable String dniPaciente,
+                                                    @PathVariable Long idDiagnostico,
+                                                    @PathVariable Long idEvolucion,
+                                                    @RequestBody JsonNode json){
+        try {
+
+            var paciente = this.sistemaClinica.editarEvolucion(
+                    idEvolucion,
+                    medicoPrueba,
+                    dniPaciente,
+                    idDiagnostico,
+                    JsonParser.informeDesdeJson(json),
+                    JsonParser.recetaDigitalDesdeJson(json),
+                    JsonParser.pedidoLaboratorioDesdeJson(json)
+            );
+
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+                    "Evolucion editada exitosamente.",
+                    JsonParser.pacienteAJson(paciente));
+
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Error al editar evolucion: " + e.getMessage(),
+                    null);
+
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @DeleteMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion/{idEvolucion}")
     public ResponseEntity<JsonNode> eliminarEvolucion(@PathVariable String dniPaciente,
                                                      @PathVariable Long idDiagnostico,
@@ -89,7 +125,7 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.CREATED.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "Error al eliminar evolucion: " + e.getMessage(),
                     null);
 
@@ -115,7 +151,7 @@ public class ClinicaRestController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
 
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.CREATED.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "Error al agregar diagnóstico: " + e.getMessage(),
                     null);
 
@@ -218,7 +254,7 @@ public class ClinicaRestController {
 
                 return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
             } catch (Exception e) {
-                ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(),
+                ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         "Error al borrar paciente: " + e.getMessage(),
                         null);
 
