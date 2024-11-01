@@ -19,7 +19,7 @@ public class DiagnosticoModel {
     @Column
     public String descripcion;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id_historia_clinica")
     private HistoriaClinicaModel historiaClinica;
 

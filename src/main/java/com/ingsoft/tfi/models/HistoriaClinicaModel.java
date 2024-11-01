@@ -21,7 +21,7 @@ public class HistoriaClinicaModel {
     @JoinColumn(name = "id_paciente")
     private PacienteModel paciente;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "historiaClinica", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "historiaClinica", orphanRemoval = true)
     private List<DiagnosticoModel> diagnosticos;
 
 
