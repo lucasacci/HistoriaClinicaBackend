@@ -161,7 +161,54 @@ public class ClinicaRestController {
         }
     }
 
+    @PutMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}")
+    public ResponseEntity<JsonNode> editarDiagnostico(@PathVariable String dniPaciente, @PathVariable Long idDiagnostico, @RequestBody JsonNode json) {
+        try {
+            String descripcionDiagnostico = JsonParser.diagnosticoDesdeJson(json);
 
+            sistemaClinica.editarDiagnostico(dniPaciente, idDiagnostico, descripcionDiagnostico);
+
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.OK.value(),
+                    "Diagnóstico editado exitosamente.",
+                    null);
+
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Error al editar diagnóstico: " + e.getMessage(),
+                    null);
+
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}")
+    public ResponseEntity<JsonNode> eliminarDiagnostico(@PathVariable String dniPaciente, @PathVariable Long idDiagnostico) {
+        try {
+
+            sistemaClinica.eliminarDiagnostico(dniPaciente, idDiagnostico);
+
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+                    "Diagnóstico eliminado exitosamente.",
+                    null);
+
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Error al eliminar diagnóstico: " + e.getMessage(),
+                    null);
+
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @GetMapping("/paciente")
     public ResponseEntity<JsonNode> getPacientes() {

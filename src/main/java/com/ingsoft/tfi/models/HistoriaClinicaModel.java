@@ -1,6 +1,7 @@
 package com.ingsoft.tfi.models;
 
 import jakarta.persistence.*;
+import jdk.jshell.Diag;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +21,7 @@ public class HistoriaClinicaModel {
     @JoinColumn(name = "id_paciente")
     private PacienteModel paciente;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "historiaClinica")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "historiaClinica", orphanRemoval = true)
     private List<DiagnosticoModel> diagnosticos;
 
 
@@ -82,4 +83,8 @@ public class HistoriaClinicaModel {
         this.paciente = paciente;
     }
 
+    public void eliminarDiagnostico(Long idDiagnostico) {
+        DiagnosticoModel diagnostico = buscarDiagnostico(idDiagnostico);
+        diagnosticos.remove(diagnostico);
+    }
 }

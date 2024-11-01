@@ -68,4 +68,8 @@ public class PacienteModel extends PersonaModel{
     public void agregarDiagnostico(String diagnostico) {
         historiaClinica.agregarDiagnostico(diagnostico);
     }
+
+    public void eliminarDiagnostico(Long idDiagnostico) {
+        historiaClinica.eliminarDiagnostico(idDiagnostico);
+    }
 }

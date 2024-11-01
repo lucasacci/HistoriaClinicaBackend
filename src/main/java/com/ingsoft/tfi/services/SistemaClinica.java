@@ -56,6 +56,13 @@ public class SistemaClinica {
         pacienteService.actualizarPaciente(paciente);
     }
 
+    public void editarDiagnostico(String dniPaciente, Long idDiagnostico, String descripcionDiagnostico) {
+        PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
+        DiagnosticoModel diagnostico = paciente.buscarDiagnostico(idDiagnostico);
+        diagnostico.editarDiagnostico(descripcionDiagnostico, diagnostico);
+        pacienteService.actualizarPaciente(paciente);
+    }
+
     public void eliminarEvolucion(String dniPaciente, Long idDiagnostico, Long idEvolucion) {
         PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
         DiagnosticoModel diagnostico = paciente.buscarDiagnostico(idDiagnostico);
@@ -70,5 +77,12 @@ public class SistemaClinica {
         diagnostico.editarEvolucion(idEvolucion, medico, informe, recetaDigital, pedidoLaboratorio);
         pacienteService.actualizarPaciente(paciente);
         return paciente;
+    }
+
+
+    public void eliminarDiagnostico(String dniPaciente, Long idDiagnostico) {
+        PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
+        paciente.eliminarDiagnostico(idDiagnostico);
+        pacienteService.actualizarPaciente(paciente);
     }
 }

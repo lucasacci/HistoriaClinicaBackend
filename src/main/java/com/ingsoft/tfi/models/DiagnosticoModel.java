@@ -43,22 +43,7 @@ public class DiagnosticoModel {
 //        return evoluciones.stream().anyMatch(evolucion -> evolucion.tiene(medico, informe));
 //    }
 
-    public void agregarEvolucion(MedicoModel medico, String informe,
-                                 RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
-        Timestamp fechaEvolucion = new Timestamp(new Date().getTime());
-        EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital, pedidoLaboratorio);
-        evolucion.setDiagnostico(this);
-        evoluciones.add(evolucion);
-    }
 
-    public void eliminarEvolucion(Long idEvolucion) {
-        EvolucionModel evolucion = evoluciones.stream()
-                .filter(evolucionModel -> evolucionModel.getId_evolucion().equals(idEvolucion))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Evolución no encontrada"));
-
-        evoluciones.remove(evolucion);
-    }
 
     public Long getId() {
         return id;
@@ -90,6 +75,20 @@ public class DiagnosticoModel {
 
     public void setEvoluciones(List<EvolucionModel> evoluciones) {
         this.evoluciones = evoluciones;
+    }
+
+
+
+    public void editarDiagnostico(String descripcionDiagnostico, DiagnosticoModel diagnostico) {
+        diagnostico.setDescripcion(descripcionDiagnostico);
+    }
+
+    public void agregarEvolucion(MedicoModel medico, String informe,
+                                 RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
+        Timestamp fechaEvolucion = new Timestamp(new Date().getTime());
+        EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital, pedidoLaboratorio);
+        evolucion.setDiagnostico(this);
+        evoluciones.add(evolucion);
     }
 
     public void editarEvolucion(Long idEvolucion, MedicoModel medico, String informe,
@@ -132,4 +131,14 @@ public class DiagnosticoModel {
         evolucion.setMedico(medico);
         evolucion.setInforme(informe);
     }
+
+    public void eliminarEvolucion(Long idEvolucion) {
+        EvolucionModel evolucion = evoluciones.stream()
+                .filter(evolucionModel -> evolucionModel.getId_evolucion().equals(idEvolucion))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Evolución no encontrada"));
+
+        evoluciones.remove(evolucion);
+    }
+
 }
