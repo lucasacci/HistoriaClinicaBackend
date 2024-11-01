@@ -62,4 +62,13 @@ public class SistemaClinica {
         diagnostico.eliminarEvolucion(idEvolucion);
         pacienteService.actualizarPaciente(paciente);
     }
+
+    public PacienteModel editarEvolucion(Long idEvolucion, MedicoModel medico, String dniPaciente, Long idDiagnostico, String informe,
+                                RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
+        PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
+        DiagnosticoModel diagnostico = paciente.buscarDiagnostico(idDiagnostico);
+        diagnostico.editarEvolucion(idEvolucion, medico, informe, recetaDigital, pedidoLaboratorio);
+        pacienteService.actualizarPaciente(paciente);
+        return paciente;
+    }
 }

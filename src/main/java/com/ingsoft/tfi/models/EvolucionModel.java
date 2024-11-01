@@ -111,4 +111,12 @@ public class EvolucionModel {
     public PedidoLaboratorioModel getPedidoLaboratorio() {
         return pedidoLaboratorio;
     }
+
+    public void setPedidoLaboratorio(PedidoLaboratorioModel pedidoLaboratorio) {
+        this.pedidoLaboratorio = pedidoLaboratorio;
+    }
+
+    public void setRecetaDigital(RecetaDigitalModel recetaDigital) {
+        this.recetaDigital = recetaDigital;
+    }
 }

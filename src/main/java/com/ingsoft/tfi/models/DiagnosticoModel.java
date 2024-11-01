@@ -58,7 +58,6 @@ public class DiagnosticoModel {
                 .orElseThrow(() -> new RuntimeException("Evolución no encontrada"));
 
         evoluciones.remove(evolucion);
-        System.out.println("Evolucion eliminada: " + idEvolucion);
     }
 
     public Long getId() {
@@ -91,5 +90,46 @@ public class DiagnosticoModel {
 
     public void setEvoluciones(List<EvolucionModel> evoluciones) {
         this.evoluciones = evoluciones;
+    }
+
+    public void editarEvolucion(Long idEvolucion, MedicoModel medico, String informe,
+                                RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
+        Timestamp fechaEdicionEvolucion = new Timestamp(new Date().getTime());
+        EvolucionModel evolucion = evoluciones.stream()
+                .filter(evolucionModel -> evolucionModel.getId_evolucion().equals(idEvolucion))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Evolución no encontrada"));
+
+        evolucion.setDiagnostico(this);
+
+        if(recetaDigital != null && pedidoLaboratorio != null) {
+            throw new IllegalArgumentException("No se puede crear una evolución con receta y con pedido de laboratorio");
+        }
+
+        if(evolucion.getRecetaDigital() == null && evolucion.getPedidoLaboratorio() == null){
+            if(recetaDigital != null && pedidoLaboratorio == null) {
+                evolucion.setRecetaDigital(recetaDigital);
+            } else if(pedidoLaboratorio != null && recetaDigital == null) {
+                evolucion.setPedidoLaboratorio(pedidoLaboratorio);
+            }
+        }
+
+        if(evolucion.getPedidoLaboratorio() != null && recetaDigital != null) {
+            evolucion.setRecetaDigital(recetaDigital);
+            evolucion.setPedidoLaboratorio(null);
+        }else if (evolucion.getRecetaDigital() != null && pedidoLaboratorio != null) {
+            evolucion.setPedidoLaboratorio(pedidoLaboratorio);
+            evolucion.setRecetaDigital(null);
+        }
+
+        if(evolucion.getPedidoLaboratorio() != null && pedidoLaboratorio == null){
+            evolucion.setPedidoLaboratorio(null);
+        }else if (evolucion.getRecetaDigital() != null && recetaDigital == null) {
+            evolucion.setRecetaDigital(null);
+        }
+
+        evolucion.setFecha(fechaEdicionEvolucion);
+        evolucion.setMedico(medico);
+        evolucion.setInforme(informe);
     }
 }
