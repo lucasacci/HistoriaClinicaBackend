@@ -1,10 +1,11 @@
-package com.ingsoft.tfi.controllers;
+package com.ingsoft.tfi.helpers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.ingsoft.tfi.models.*;
+import com.ingsoft.tfi.domain.models.*;
+import com.ingsoft.tfi.dto.ApiResponse;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -15,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public class JsonParser {
 

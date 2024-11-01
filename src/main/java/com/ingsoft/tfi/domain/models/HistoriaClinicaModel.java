@@ -1,12 +1,9 @@
-package com.ingsoft.tfi.models;
+package com.ingsoft.tfi.domain.models;
 
 import jakarta.persistence.*;
-import jdk.jshell.Diag;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity

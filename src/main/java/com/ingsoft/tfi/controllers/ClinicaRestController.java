@@ -1,9 +1,10 @@
 package com.ingsoft.tfi.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.ingsoft.tfi.models.ApiResponse;
-import com.ingsoft.tfi.models.MedicoModel;
-import com.ingsoft.tfi.models.PacienteModel;
+import com.ingsoft.tfi.dto.ApiResponse;
+import com.ingsoft.tfi.domain.models.MedicoModel;
+import com.ingsoft.tfi.domain.models.PacienteModel;
+import com.ingsoft.tfi.helpers.JsonParser;
 import com.ingsoft.tfi.services.SistemaClinica;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

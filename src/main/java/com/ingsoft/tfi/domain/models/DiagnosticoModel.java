@@ -1,13 +1,11 @@
-package com.ingsoft.tfi.models;
+package com.ingsoft.tfi.domain.models;
 
 import jakarta.persistence.*;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Table(name = "diagnosticos")

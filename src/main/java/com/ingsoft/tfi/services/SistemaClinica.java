@@ -1,11 +1,10 @@
 package com.ingsoft.tfi.services;
 
 
-import com.ingsoft.tfi.models.*;
+import com.ingsoft.tfi.domain.models.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SistemaClinica {

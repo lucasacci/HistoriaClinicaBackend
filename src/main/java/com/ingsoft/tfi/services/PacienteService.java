@@ -1,16 +1,10 @@
 package com.ingsoft.tfi.services;
 
-import com.ingsoft.tfi.models.DiagnosticoModel;
-import com.ingsoft.tfi.models.EvolucionModel;
-import com.ingsoft.tfi.models.HistoriaClinicaModel;
-import com.ingsoft.tfi.models.PacienteModel;
+import com.ingsoft.tfi.domain.models.PacienteModel;
 import com.ingsoft.tfi.repositories.IRepositorioPaciente;
-import jdk.jshell.Diag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service

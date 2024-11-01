@@ -1,5 +1,6 @@
-package com.ingsoft.tfi.models;
+package com.ingsoft.tfi.domain.models;
 
+import com.ingsoft.tfi.domain.base.PersonaModel;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -7,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "medicos")
-public class MedicoModel extends PersonaModel{
+public class MedicoModel extends PersonaModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

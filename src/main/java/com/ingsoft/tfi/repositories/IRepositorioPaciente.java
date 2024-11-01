@@ -1,6 +1,6 @@
 package com.ingsoft.tfi.repositories;
 
-import com.ingsoft.tfi.models.PacienteModel;
+import com.ingsoft.tfi.domain.models.PacienteModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

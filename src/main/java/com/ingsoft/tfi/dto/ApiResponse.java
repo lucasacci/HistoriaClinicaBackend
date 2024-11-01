@@ -1,4 +1,4 @@
-package com.ingsoft.tfi.models;
+package com.ingsoft.tfi.dto;
 
 public class ApiResponse<T> {
     private int status;

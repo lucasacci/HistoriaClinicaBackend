@@ -1,4 +1,4 @@
-package com.ingsoft.tfi.models;
+package com.ingsoft.tfi.domain.models;
 
 import jakarta.persistence.*;
 
