@@ -1,5 +1,6 @@
 package com.ingsoft.tfi.config.security;
 
+import com.ingsoft.tfi.helpers.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,17 +23,17 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Solo admin puede acceder
-                        .requestMatchers("/medico/**").hasRole("MEDICO") // Solo médicos pueden acceder
-                        .requestMatchers("/recepcionista/**").hasRole("RECEPCIONISTA") // Solo recepcionistas pueden acceder
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/medico/**").hasRole("MEDICO")
+                        .requestMatchers("/recepcionista/**").hasRole("RECEPCIONISTA")
                         .requestMatchers("/auth/login").permitAll()
                         .anyRequest().authenticated() // El resto de rutas requiere autenticación
                 )
-
                 .csrf(csrf -> csrf.disable()) // Deshabilita CSRF si es una API
                 .formLogin(form -> form.disable())
                 .logout(logout -> logout.permitAll()) // Permite el logout
                 .httpBasic(Customizer.withDefaults());
+        http.addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

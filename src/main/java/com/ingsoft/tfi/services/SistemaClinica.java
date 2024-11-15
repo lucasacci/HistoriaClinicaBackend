@@ -10,9 +10,11 @@ import java.util.List;
 public class SistemaClinica {
 
     private final PacienteService pacienteService;
+    private final MedicoService medicoService;
 
-    public SistemaClinica(PacienteService pacienteService) {
+    public SistemaClinica(PacienteService pacienteService, MedicoService medicoService) {
         this.pacienteService = pacienteService;
+        this.medicoService = medicoService;
     }
 
     public PacienteModel agregarEvolucion(MedicoModel medico, String dniPaciente, Long diagnosticoElegido, String informe,
@@ -83,5 +85,9 @@ public class SistemaClinica {
         PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
         paciente.eliminarDiagnostico(idDiagnostico);
         pacienteService.actualizarPaciente(paciente);
+    }
+
+    public String agregarMedico(MedicoModel medico) {
+        return medicoService.agregarMedico(medico);
     }
 }

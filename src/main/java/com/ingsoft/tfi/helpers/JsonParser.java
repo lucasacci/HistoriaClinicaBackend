@@ -248,7 +248,59 @@ public class JsonParser {
     }
 
 
+    public static MedicoModel medicoDesdeJson(JsonNode json) {
+
+        String nombre = json.get("nombre").asText();
+        String apellido = json.get("apellido").asText();
+        String dni = json.get("dni").asText();
+        String email = json.get("email").asText();
+        String direccion = json.get("direccion").asText();
+        String telefono = json.get("telefono").asText();
+        String matricula = json.get("matricula").asText();
+        String especialidad = json.get("especialidad").asText();
+
+        // Formateador de fecha para "yyyy-MM-dd"
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaNacimiento = null;
+
+        try {
+            fechaNacimiento = formatoFecha.parse(json.get("fechaNacimiento").asText());
+        } catch (ParseException e) {
+            e.printStackTrace(); // Manejo de error al parsear la fecha
+        }
 
 
+        MedicoModel medico = new MedicoModel();
+        medico.setNombre(nombre);
+        medico.setApellido(apellido);
+        medico.setDni(dni);
+        medico.setEmail(email);
+        medico.setTelefono(telefono);
+        medico.setFechaNacimiento(fechaNacimiento);
+        medico.setDireccion(direccion);
+        medico.setEspecialidad(especialidad);
+        medico.setMatricula(matricula);
 
+        return medico;
+    }
+
+    public static JsonNode medicoAJson(MedicoModel medico) {
+        ObjectNode json = mapper.createObjectNode();
+
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+
+        String fechaFormateada = formatoFecha.format(medico.getFechaNacimiento());
+
+        json.put("nombre" , medico.getNombre());
+        json.put("apellido" , medico.getApellido());
+        json.put("dni" , medico.getDni());
+        json.put("email" , medico.getEmail());
+        json.put("telefono" , medico.getTelefono());
+        json.put("fechaNacimiento" , fechaFormateada);
+        json.put("direccion" , medico.getDireccion());
+        json.put("especialidad" , medico.getEspecialidad());
+        json.put("matricula" , medico.getMatricula());
+
+        return json;
+    }
 }
