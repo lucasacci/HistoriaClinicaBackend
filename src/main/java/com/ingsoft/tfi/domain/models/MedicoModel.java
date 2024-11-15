@@ -1,6 +1,7 @@
 package com.ingsoft.tfi.domain.models;
 
 import com.ingsoft.tfi.domain.base.PersonaModel;
+import com.ingsoft.tfi.domain.models.auth.UserModel;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -20,6 +21,10 @@ public class MedicoModel extends PersonaModel {
     @Column
     private String especialidad;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserModel user;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "medico")
     private List<EvolucionModel> evoluciones;
 //TODO: Agregar id_medico al constructor
@@ -30,12 +35,13 @@ public class MedicoModel extends PersonaModel {
                        String email,
                        Date fechaNacimiento,
                        String direccion,
-                       int telefono,
+                       String telefono,
                        String matricula,
                        String especialidad) {
         super(nombre, apellido, dni, email, fechaNacimiento, direccion, telefono);
         this.matricula = matricula;
         this.especialidad = especialidad;
+        this.user = user;
     }
 
     public MedicoModel() {
