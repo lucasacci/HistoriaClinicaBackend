@@ -2,19 +2,13 @@ package com.ingsoft.tfi.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ingsoft.tfi.domain.models.MedicoModel;
-import com.ingsoft.tfi.domain.models.PacienteModel;
-import com.ingsoft.tfi.domain.models.auth.UserPrincipal;
+import com.ingsoft.tfi.services.auth.jwt.JwtUtil;
 import com.ingsoft.tfi.dto.ApiResponse;
 import com.ingsoft.tfi.helpers.JsonParser;
 import com.ingsoft.tfi.services.SistemaClinica;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.ParseException;
-import java.util.List;
 
 @RestController("/admin")
 public class AdminController {
@@ -26,15 +20,21 @@ public class AdminController {
     }
 
     @PostMapping("/medico")
-    public ResponseEntity<JsonNode> agregarMedico(@RequestBody JsonNode jsonMedico){
-        System.out.println("Usuario autenticado: " );
+    public ResponseEntity<JsonNode> agregarMedico(@RequestBody JsonNode jsonMedico, @RequestHeader String token){
+
         try {
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+            JwtUtil jwtUtil = new JwtUtil();
 
-            System.out.println("Usuario autenticado: " + user.getUsername());
+            boolean isValid = jwtUtil.isValid(token);
 
+            if (!isValid) {
+                // Si el token no es válido, devolver respuesta de error
+                ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
+                        "Token inválido o expirado", null);
+                JsonNode jsonResponse = JsonParser.responseAJson(response);
+                return new ResponseEntity<>(jsonResponse, HttpStatus.UNAUTHORIZED);
+            }
             MedicoModel medico = JsonParser.medicoDesdeJson(jsonMedico);
             String respuesta = sistemaClinica.agregarMedico(medico);
 

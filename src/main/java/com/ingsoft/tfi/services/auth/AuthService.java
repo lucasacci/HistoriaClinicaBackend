@@ -1,12 +1,12 @@
 package com.ingsoft.tfi.services.auth;
 
 import com.ingsoft.tfi.domain.auth.Token;
-import com.ingsoft.tfi.domain.models.auth.JwtUtil;
 import com.ingsoft.tfi.domain.models.auth.UserModel;
 import com.ingsoft.tfi.dto.LoginRequest;
 import com.ingsoft.tfi.dto.TokenResponse;
 import com.ingsoft.tfi.repositories.ITokenRepository;
 import com.ingsoft.tfi.repositories.IUserRepository;
+import com.ingsoft.tfi.services.auth.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

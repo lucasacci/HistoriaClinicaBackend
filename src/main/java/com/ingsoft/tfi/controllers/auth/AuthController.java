@@ -46,35 +46,5 @@ public class AuthController {
         }
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<JsonNode> login(@RequestBody final LoginRequest request) {
-//        try {
-//            TokenResponse tokenResponse = authService.login(request);
-//
-//            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.OK.value(),
-//                    "Logueo Exitoso!",
-//                    ResponseEntity.ok(tokenResponse));
-//
-//            JsonNode jsonResponse = JsonParser.responseAJson(response);
-//
-//            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
-//        } catch (Exception e) {
-//            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-//                    "Error al loguearse" + e.getMessage(),
-//                    null);
-//
-//            JsonNode jsonResponse = JsonParser.responseAJson(response);
-//
-//            return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
-//        }
-//    }
-
-//    @PostMapping("/refresh")
-//    public ResponseEntity<JsonNode> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) final JsonNode json) {
-//
-//        String authHeader = JsonParser.authRequestDesdeJson(json);
-//
-//        return authService.refreshToken(authHeader);
-//    }
 
 }
