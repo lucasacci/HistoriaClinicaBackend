@@ -53,7 +53,7 @@ public class ClinicaRestController {
                     JsonParser.pedidoLaboratorioDesdeJson(json)
             );
             paciente.getHistoriaClinica().getDiagnosticos().forEach(e-> e.getEvoluciones().forEach(x -> System.out.println(x.getFecha())));
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.CREATED.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Evolución agregada exitosamente.",
                     JsonParser.pacienteAJson(paciente));
 
@@ -61,7 +61,7 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception e) {
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error al agregar la evolución" + e.getMessage(),
                     null
             );
@@ -89,7 +89,7 @@ public class ClinicaRestController {
                     JsonParser.pedidoLaboratorioDesdeJson(json)
             );
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Evolucion editada exitosamente.",
                     JsonParser.pacienteAJson(paciente));
 
@@ -97,7 +97,7 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
                     "Error al editar evolucion: " + e.getMessage(),
                     null);
 
@@ -118,7 +118,7 @@ public class ClinicaRestController {
                     idDiagnostico,
                     idEvolucion);
 
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.CREATED.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
                     "Evolucion eliminada exitosamente.",
                     null);
 
@@ -126,7 +126,7 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
                     "Error al eliminar evolucion: " + e.getMessage(),
                     null);
 
@@ -143,7 +143,7 @@ public class ClinicaRestController {
 
             sistemaClinica.agregarDiagnostico(dniPaciente, descripcionDiagnostico);
 
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.CREATED.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
                     "Diagnóstico agregado exitosamente.",
                     null);
 
@@ -152,7 +152,7 @@ public class ClinicaRestController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
 
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
                     "Error al agregar diagnóstico: " + e.getMessage(),
                     null);
 
@@ -169,7 +169,7 @@ public class ClinicaRestController {
 
             sistemaClinica.editarDiagnostico(dniPaciente, idDiagnostico, descripcionDiagnostico);
 
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
                     "Diagnóstico editado exitosamente.",
                     null);
 
@@ -177,7 +177,7 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
                     "Error al editar diagnóstico: " + e.getMessage(),
                     null);
 
@@ -193,7 +193,7 @@ public class ClinicaRestController {
 
             sistemaClinica.eliminarDiagnostico(dniPaciente, idDiagnostico);
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Diagnóstico eliminado exitosamente.",
                     null);
 
@@ -201,7 +201,7 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error al eliminar diagnóstico: " + e.getMessage(),
                     null);
 
@@ -219,7 +219,7 @@ public class ClinicaRestController {
         try {
             pacientes.forEach(pacienteModel -> pacientesJson.add(JsonParser.pacienteAJson(pacienteModel)));
 
-            ApiResponse<List<JsonNode>> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
                     "Obtener pacientes",
                     pacientesJson);
 
@@ -227,7 +227,7 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<Void> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+            ApiResponse<Void> response = new ApiResponse<>(
                     "Error al obtener pacientes: " + e.getMessage(),
                     null);
 
@@ -242,7 +242,7 @@ public class ClinicaRestController {
         try{
             var paciente = this.sistemaClinica.buscarPaciente(dniPaciente);
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Paciente encontrado",
                     JsonParser.pacienteAJson(paciente));
 
@@ -250,7 +250,7 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.FOUND);
         } catch (Exception e) {
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error al buscar el paciente: " + e.getMessage(),
                     null);
 
@@ -268,7 +268,7 @@ public class ClinicaRestController {
             PacienteModel paciente = JsonParser.pacienteDesdeJson(jsonPaciente);
             String respuesta = sistemaClinica.agregarPaciente(paciente);
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     respuesta,
                     JsonParser.pacienteAJson(paciente));
 
@@ -277,7 +277,7 @@ public class ClinicaRestController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception e) {
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error al agregar el paciente: " + e.getMessage(),
                     null);
 
@@ -294,7 +294,7 @@ public class ClinicaRestController {
             try{
                 String resultado = sistemaClinica.borrarPaciente(dniPaciente);
 
-                ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+                ApiResponse<JsonNode> response = new ApiResponse<>(
                         resultado,
                         null);
 
@@ -302,7 +302,7 @@ public class ClinicaRestController {
 
                 return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
             } catch (Exception e) {
-                ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                ApiResponse<String> response = new ApiResponse<>(
                         "Error al borrar paciente: " + e.getMessage(),
                         null);
 
@@ -318,7 +318,7 @@ public class ClinicaRestController {
             PacienteModel paciente = JsonParser.pacienteDesdeJson(jsonPaciente);
 
             if (!paciente.getDni().equals(idPaciente)) {
-                ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+                ApiResponse<JsonNode> response = new ApiResponse<>(
                         "El ID del paciente en la URL no coincide con el ID en los datos proporcionados.",
                         null);
 
@@ -329,7 +329,7 @@ public class ClinicaRestController {
 
             String respuesta = sistemaClinica.editarPaciente(paciente);
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     respuesta,
                     null);
 
@@ -337,7 +337,7 @@ public class ClinicaRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error al editar paciente: " + e.getMessage(),
                     null);
 
