@@ -1,9 +1,11 @@
 package com.ingsoft.tfi.domain.models;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Entity
@@ -47,10 +49,10 @@ public class HistoriaClinicaModel {
     }
 
     public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe,
-                                 RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
+                                 JsonNode recetaDigital, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio) {
         DiagnosticoModel diagnostico = buscarDiagnostico(diagnosticoElegido);
         if (diagnostico != null) {
-            diagnostico.agregarEvolucion(medico, informe, recetaDigital, pedidoLaboratorio);
+            diagnostico.agregarEvolucion(medico, informe, recetaDigital, medicamentos, medicamentosAmount, pedidoLaboratorio);
         } else {
             throw new RuntimeException("Diagnóstico no encontrado");
         }

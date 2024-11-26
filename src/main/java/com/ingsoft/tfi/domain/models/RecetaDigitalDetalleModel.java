@@ -26,6 +26,11 @@ public class RecetaDigitalDetalleModel {
         this.recetaDigital = recetaDigital;
     }
 
+    public RecetaDigitalDetalleModel(Integer cantidad, MedicamentoModel medicamento){
+        this.medicamento = medicamento;
+        this.cantidad = cantidad;
+    }
+
     public RecetaDigitalDetalleModel() {}
 
     public int getId_receta_digital_detalle() {

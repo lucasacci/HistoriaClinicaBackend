@@ -49,8 +49,10 @@ public class ClinicaRestController {
                     dniPaciente,
                     idDiagnostico,
                     JsonParser.informeDesdeJson(json),
-                    JsonParser.recetaDigitalDesdeJson(json),
-                    JsonParser.pedidoLaboratorioDesdeJson(json)
+                    JsonParser.checkRecetaDigiatal(json),
+                    JsonParser.getMedicamentosFromJson(json),
+                    JsonParser.getMedicamentosAmountFromJson(json),
+                    JsonParser.pedidoLaboratorioDescriptionFromJson(json)
             );
             paciente.getHistoriaClinica().getDiagnosticos().forEach(e-> e.getEvoluciones().forEach(x -> System.out.println(x.getFecha())));
             ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.CREATED.value(),
