@@ -112,6 +112,13 @@ public class JsonParser {
         return receteDigitalCabecera;
     }
 
+    public static String pedidoLaboratorioDescriptionFromJson(JsonNode json){
+        if (!json.has("pedidoLaboratorio")) {
+            return null;
+        }
+        return json.get("pedidoLaboratorio").get("descripcion").asText();
+    }
+
     public static PedidoLaboratorioModel pedidoLaboratorioDesdeJson(JsonNode json){
         if (!json.has("pedidoLaboratorio")) {
             return null;

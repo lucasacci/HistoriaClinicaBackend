@@ -42,7 +42,7 @@ public class EvolucionModel {
     private PedidoLaboratorioModel pedidoLaboratorio;
 
     public EvolucionModel(String informe, Date fecha, MedicoModel medico,
-                          JsonNode recetaDigitalJson, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, PedidoLaboratorioModel pedidoLaboratorio) {
+                          JsonNode recetaDigitalJson, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio) {
         this.informe = informe;
         this.fecha = fecha;
         this.medico = medico;
@@ -73,7 +73,8 @@ public class EvolucionModel {
         }
 
         if(posiblePedidoLab.isPresent()){
-            this.pedidoLaboratorio = pedidoLaboratorio;
+            PedidoLaboratorioModel pedidoLaboratorioObject = new PedidoLaboratorioModel(pedidoLaboratorio);
+            this.pedidoLaboratorio = pedidoLaboratorioObject;
         }
     }
 

@@ -47,7 +47,7 @@ public class PacienteModel extends PersonaModel {
     }
 
     public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe,
-                                 JsonNode recetaDigital, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, PedidoLaboratorioModel pedidoLaboratorio){
+                                 JsonNode recetaDigital, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio){
         this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital, medicamentos, medicamentosAmount, pedidoLaboratorio);
     }
 
