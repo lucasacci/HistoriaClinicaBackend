@@ -1,10 +1,12 @@
 package com.ingsoft.tfi.domain.models;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.ingsoft.tfi.domain.base.PersonaModel;
 import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "pacientes")
@@ -45,8 +47,8 @@ public class PacienteModel extends PersonaModel {
     }
 
     public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe,
-                                 RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio){
-        this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital, pedidoLaboratorio);
+                                 JsonNode recetaDigital, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, PedidoLaboratorioModel pedidoLaboratorio){
+        this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital, medicamentos, medicamentosAmount, pedidoLaboratorio);
     }
 
     public Long getId_paciente() {

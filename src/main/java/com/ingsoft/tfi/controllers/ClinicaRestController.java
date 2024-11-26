@@ -49,7 +49,9 @@ public class ClinicaRestController {
                     dniPaciente,
                     idDiagnostico,
                     JsonParser.informeDesdeJson(json),
-                    JsonParser.recetaDigitalDesdeJson(json),
+                    JsonParser.checkRecetaDigiatal(json),
+                    JsonParser.getMedicamentosFromJson(json),
+                    JsonParser.getMedicamentosAmountFromJson(json),
                     JsonParser.pedidoLaboratorioDesdeJson(json)
             );
             paciente.getHistoriaClinica().getDiagnosticos().forEach(e-> e.getEvoluciones().forEach(x -> System.out.println(x.getFecha())));

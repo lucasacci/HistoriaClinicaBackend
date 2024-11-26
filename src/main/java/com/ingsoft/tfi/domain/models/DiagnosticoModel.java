@@ -1,11 +1,13 @@
 package com.ingsoft.tfi.domain.models;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "diagnosticos")
@@ -82,9 +84,9 @@ public class DiagnosticoModel {
     }
 
     public void agregarEvolucion(MedicoModel medico, String informe,
-                                 RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
+                                 JsonNode recetaDigital, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, PedidoLaboratorioModel pedidoLaboratorio) {
         Timestamp fechaEvolucion = new Timestamp(new Date().getTime());
-        EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital, pedidoLaboratorio);
+        EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital, medicamentos, medicamentosAmount, pedidoLaboratorio);
         evolucion.setDiagnostico(this);
         evoluciones.add(evolucion);
     }
