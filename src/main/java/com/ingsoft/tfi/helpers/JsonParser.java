@@ -237,7 +237,7 @@ public class JsonParser {
         String dni = json.get("dni").asText();
         String email = json.get("email").asText();
         String direccion = json.get("direccion").asText();
-        int telefono = json.get("telefono").asInt();
+        String telefono = json.get("telefono").asText();
 
         // Formateador de fecha para "yyyy-MM-dd"
         SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");

@@ -20,7 +20,7 @@ public class PacienteModel extends PersonaModel {
     @JoinColumn(name = "id_historia_clinica")
     private HistoriaClinicaModel historiaClinica;
 
-    public PacienteModel(String nombre, String apellido, String dni, String email, Date fechaNacimiento, String direccion, int telefono, Long id_paciente, HistoriaClinicaModel historiaClinica) {
+    public PacienteModel(String nombre, String apellido, String dni, String email, Date fechaNacimiento, String direccion, String telefono, Long id_paciente, HistoriaClinicaModel historiaClinica) {
         super(nombre, apellido, dni, email, fechaNacimiento, direccion, telefono);
         this.id_paciente = id_paciente;
         this.historiaClinica = historiaClinica;
@@ -32,7 +32,7 @@ public class PacienteModel extends PersonaModel {
                          String email,
                          Date fechaNacimiento,
                          String direccion,
-                         int telefono,
+                         String telefono,
                          List<String>diagnosticosPreexistentes) {
         super(nombre, apellido, dni, email, fechaNacimiento, direccion, telefono);
         this.historiaClinica = new HistoriaClinicaModel(diagnosticosPreexistentes);

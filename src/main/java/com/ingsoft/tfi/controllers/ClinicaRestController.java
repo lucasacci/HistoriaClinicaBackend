@@ -30,7 +30,7 @@ public class ClinicaRestController {
             "colombia",
             fecha,
             "m2a",
-            38123,
+            "38123",
         "232",
         "pediatra");
 
