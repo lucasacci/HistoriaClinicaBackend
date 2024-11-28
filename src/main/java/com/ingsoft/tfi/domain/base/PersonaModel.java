@@ -11,10 +11,10 @@ public abstract class PersonaModel {
     private String dni;
     private Date fechaNacimiento;
     private String email;
-    private int telefono;
+    private String telefono;
     private String direccion;
 
-    public PersonaModel(String nombre, String apellido, String dni, String email, Date fechaNacimiento, String direccion, int telefono) {
+    public PersonaModel(String nombre, String apellido, String dni, String email, Date fechaNacimiento, String direccion, String telefono) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -68,11 +68,11 @@ public abstract class PersonaModel {
         this.email = email;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
