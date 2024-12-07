@@ -43,6 +43,15 @@ public class EvolucionModel {
 
     public EvolucionModel(String informe, Date fecha, MedicoModel medico,
                           JsonNode recetaDigitalJson, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio) {
+
+
+        if (informe == null || informe.equals("")){
+            throw new RuntimeException("Informe vacio o nulo.");
+        }
+        if (informe.trim().equals("")){
+            throw new RuntimeException("Informe vacio o nulo.");
+        }
+
         this.informe = informe;
         this.fecha = fecha;
         this.medico = medico;

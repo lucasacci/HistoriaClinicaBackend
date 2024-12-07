@@ -54,7 +54,11 @@ public class ClinicaRestController {
                     JsonParser.getMedicamentosAmountFromJson(json),
                     JsonParser.pedidoLaboratorioDescriptionFromJson(json)
             );
-            paciente.getHistoriaClinica().getDiagnosticos().forEach(e-> e.getEvoluciones().forEach(x -> System.out.println(x.getFecha())));
+            paciente.getHistoriaClinica().getDiagnosticos().forEach(e->
+                    e.getEvoluciones().forEach(x ->
+                            System.out.println(x.getFecha())
+                    )
+            );
             ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Evolución agregada exitosamente.",
                     JsonParser.pacienteAJson(paciente));
@@ -64,7 +68,7 @@ public class ClinicaRestController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception e) {
             ApiResponse<JsonNode> response = new ApiResponse<>(
-                    "Error al agregar la evolución" + e.getMessage(),
+                    "Error al agregar la evolución. Ex: " + e.getMessage(),
                     null
             );
 

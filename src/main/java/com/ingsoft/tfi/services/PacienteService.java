@@ -15,6 +15,9 @@ public class PacienteService {
 
     private Map<String, PacienteModel> pacientes;
 
+    public  PacienteService(IRepositorioPaciente repositorioPaciente){
+        this.repositorioPaciente = repositorioPaciente;
+    }
 
     public PacienteService() {
         pacientes = new HashMap<>();
