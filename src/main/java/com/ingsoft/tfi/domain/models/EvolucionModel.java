@@ -34,7 +34,7 @@ public class EvolucionModel {
     private MedicoModel medico;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_receta")
+    @JoinColumn(name = "id_receta_digital")
     private RecetaDigitalModel recetaDigital;
 
     @OneToOne(cascade = CascadeType.ALL)

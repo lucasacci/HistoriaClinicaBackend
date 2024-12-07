@@ -22,7 +22,7 @@ public class RecetaDigitalModel {
     @Column
     private String descripcion;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "recetaDigital")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "id_receta_digital_detalle")
     private List<RecetaDigitalDetalleModel> recetaDigitaldetalle;
 
     public RecetaDigitalModel(Date fecha, String descripcion, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount) {
@@ -33,7 +33,8 @@ public class RecetaDigitalModel {
             recetaDigitaldetalle.add(new RecetaDigitalDetalleModel(
                     medicamentosAmount.get(
                             medicamentoModel.getNombreComercial()),
-                            medicamentoModel
+                            medicamentoModel,
+                            this
                     )
             );
         });
