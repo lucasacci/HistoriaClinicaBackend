@@ -15,6 +15,9 @@ public class PedidoLaboratorioModel {
     private String descripcion;
 
     public PedidoLaboratorioModel(String descripcion) {
+        if (descripcion == null || descripcion.trim().equals("")){
+            throw new IllegalArgumentException("Pedido de laboratorio Nulo o Vacio.");
+        }
         this.descripcion = descripcion;
     }
 
