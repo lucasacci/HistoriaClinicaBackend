@@ -43,12 +43,7 @@ public class EvolucionModel {
 
     public EvolucionModel(String informe, Date fecha, MedicoModel medico,
                           JsonNode recetaDigitalJson, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio) {
-
-
-        if (informe == null || informe.equals("")){
-            throw new RuntimeException("Informe vacio o nulo.");
-        }
-        if (informe.trim().equals("")){
+        if (informe == null || informe.trim().equals("")){
             throw new RuntimeException("Informe vacio o nulo.");
         }
 
@@ -71,7 +66,7 @@ public class EvolucionModel {
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-            String descripcion = recetaDigitalJson.get("descripcion").asText();
+            String descripcion = recetaDigitalJson.get("descripcion").asText("");
             RecetaDigitalModel recetaDigitalObject = new RecetaDigitalModel(
                     date,
                     descripcion,

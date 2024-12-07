@@ -116,7 +116,7 @@ public class JsonParser {
         if (!json.has("pedidoLaboratorio")) {
             return null;
         }
-        return json.get("pedidoLaboratorio").get("descripcion").asText();
+        return json.get("pedidoLaboratorio").get("descripcion").asText("");
     }
 
     public static PedidoLaboratorioModel pedidoLaboratorioDesdeJson(JsonNode json){
