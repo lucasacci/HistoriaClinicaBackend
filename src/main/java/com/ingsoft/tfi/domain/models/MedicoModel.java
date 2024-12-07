@@ -2,7 +2,7 @@ package com.ingsoft.tfi.domain.models;
 
 import com.ingsoft.tfi.domain.base.PersonaModel;
 import jakarta.persistence.*;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +21,11 @@ public class MedicoModel extends PersonaModel {
     private String especialidad;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "medico")
-    private List<EvolucionModel> evoluciones;
-//TODO: Agregar id_medico al constructor
+    private List<EvolucionModel> evoluciones = new ArrayList<>();
+
+    @OneToOne(mappedBy = "medico", cascade = CascadeType.ALL)
+    private UserModel user;
+
     public MedicoModel(Long id_medico,
             String nombre,
                        String apellido,
@@ -63,5 +66,24 @@ public class MedicoModel extends PersonaModel {
 
     public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
+    }
+
+    public List<EvolucionModel> getEvoluciones() {
+        return evoluciones;
+    }
+
+    public void setEvoluciones(List<EvolucionModel> evoluciones) {
+        this.evoluciones = evoluciones;
+    }
+
+    public UserModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserModel user) {
+        this.user = user;
+        if (user != null && user.getMedico() != this) {
+            user.setMedico(this);
+        }
     }
 }

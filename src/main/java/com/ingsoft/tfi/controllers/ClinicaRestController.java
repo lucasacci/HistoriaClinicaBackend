@@ -6,46 +6,56 @@ import com.ingsoft.tfi.domain.models.MedicoModel;
 import com.ingsoft.tfi.domain.models.PacienteModel;
 import com.ingsoft.tfi.helpers.JsonParser;
 import com.ingsoft.tfi.services.SistemaClinica;
+import com.ingsoft.tfi.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
 public class ClinicaRestController {
 
-    private SistemaClinica sistemaClinica;
+    private final SistemaClinica sistemaClinica;
+    private final UserService userService;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    Date fecha = sdf.parse("23/02/2000");
-//TODO: Elimnar y usar la sesion para obtener el medico
-    private final MedicoModel medicoPrueba = new MedicoModel(1l,"Lucho",
-            "Casacci",
-            "x",
-            "colombia",
-            fecha,
-            "m2a",
-            38123,
-        "232",
-        "pediatra");
+//    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-    public ClinicaRestController(SistemaClinica sistemaClinica) throws ParseException {
+    public ClinicaRestController(SistemaClinica sistemaClinica,
+                                 UserService userService) {
         this.sistemaClinica = sistemaClinica;
+        this.userService = userService;
     }
 
-
+    private MedicoModel getMedicoActual() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Usuario autenticado: " + auth.getName());  // Debug log
+        
+        var userOptional = userService.findByEmail(auth.getName());
+        System.out.println("Usuario encontrado: " + userOptional.isPresent());  // Debug log
+        
+        if (userOptional.isPresent()) {
+            var medico = userOptional.get().getMedico();
+            System.out.println("Médico encontrado: " + 
+                (medico != null ? medico.getNombre() + " " + medico.getApellido() : "null"));  // Debug log usando nombre y apellido
+            if (medico == null) {
+                throw new RuntimeException("El usuario no tiene un médico asociado");
+            }
+            return medico;
+        }
+        
+        throw new RuntimeException("No se encontró el médico en sesión");
+    }
     @PostMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion")
     public ResponseEntity<JsonNode> agregarEvolucion(@PathVariable String dniPaciente,
-                                             @PathVariable Long idDiagnostico,
-                                             @RequestBody JsonNode json){
+                                                     @PathVariable Long idDiagnostico,
+                                                     @RequestBody JsonNode json){
         try {
             var paciente = this.sistemaClinica.agregarEvolucion(
-                    medicoPrueba,
+                    getMedicoActual(),
                     dniPaciente,
                     idDiagnostico,
                     JsonParser.informeDesdeJson(json),
@@ -81,7 +91,7 @@ public class ClinicaRestController {
 
             var paciente = this.sistemaClinica.editarEvolucion(
                     idEvolucion,
-                    medicoPrueba,
+                    getMedicoActual(),
                     dniPaciente,
                     idDiagnostico,
                     JsonParser.informeDesdeJson(json),
@@ -110,11 +120,11 @@ public class ClinicaRestController {
 
     @DeleteMapping("/paciente/{dniPaciente}/diagnostico/{idDiagnostico}/evolucion/{idEvolucion}")
     public ResponseEntity<JsonNode> eliminarEvolucion(@PathVariable String dniPaciente,
-                                                     @PathVariable Long idDiagnostico,
-                                                     @PathVariable Long idEvolucion){
+                                                      @PathVariable Long idDiagnostico,
+                                                      @PathVariable Long idEvolucion){
 
         try {
-                this.sistemaClinica.eliminarEvolucion(dniPaciente,
+            this.sistemaClinica.eliminarEvolucion(dniPaciente,
                     idDiagnostico,
                     idEvolucion);
 
@@ -291,25 +301,25 @@ public class ClinicaRestController {
     @DeleteMapping("/paciente/{dniPaciente}")
     public ResponseEntity<JsonNode> eliminarPaciente(@PathVariable String dniPaciente){
 
-            try{
-                String resultado = sistemaClinica.borrarPaciente(dniPaciente);
+        try{
+            String resultado = sistemaClinica.borrarPaciente(dniPaciente);
 
-                ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
-                        resultado,
-                        null);
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+                    resultado,
+                    null);
 
-                JsonNode jsonResponse = JsonParser.responseAJson(response);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
 
-                return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
-            } catch (Exception e) {
-                ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                        "Error al borrar paciente: " + e.getMessage(),
-                        null);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Error al borrar paciente: " + e.getMessage(),
+                    null);
 
-                JsonNode jsonResponse = JsonParser.responseAJson(response);
+            JsonNode jsonResponse = JsonParser.responseAJson(response);
 
-                return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/paciente/{idPaciente}")

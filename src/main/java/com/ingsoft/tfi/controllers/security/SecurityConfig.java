@@ -2,6 +2,7 @@ package com.ingsoft.tfi.controllers.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,20 +17,22 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/paciente/**").authenticated()
-                        .anyRequest().authenticated() // El resto de rutas requiere autenticación
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .anyRequest().hasAuthority("ROLE_USER")
                 )
-                .csrf(csrf -> csrf.disable()) // Deshabilita CSRF si es una API
-                .formLogin(form -> form.disable())
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Habilita sesiones si son necesarias
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 )
-                .logout(logout -> logout
-                        .logoutUrl("/auth/logout") // Define tu propia URL para logout
-                        .invalidateHttpSession(true) // Invalida la sesión
-                        .deleteCookies("JSESSIONID") // Elimina cookies
-                        .permitAll() // Permitir acceso sin autenticación
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
+                .exceptionHandling(ex -> ex
+                    .authenticationEntryPoint((request, response, authException) -> {
+                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                        response.getWriter().write("No autorizado: " + authException.getMessage());
+                    })
                 );
 
         return http.build();
@@ -39,5 +42,4 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
