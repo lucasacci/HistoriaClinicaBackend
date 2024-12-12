@@ -13,9 +13,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class JsonParser {
 
@@ -29,6 +27,45 @@ public class JsonParser {
     ;
     public static String informeDesdeJson(JsonNode json){
         return json.get("informe").asText("");
+    }
+
+    public static JsonNode checkRecetaDigiatal(JsonNode json){
+        if (!json.has("receta")) {
+            return null;
+        }
+        return json.get("receta");
+    }
+
+    public static Map<String,Integer> getMedicamentosAmountFromJson(JsonNode json){
+        if (!json.has("receta")) {
+            return null;
+        }
+        JsonNode jsonReceta = json.get("receta");
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        jsonReceta.get("medicamentos").forEach( medicamentoJson -> {
+            map.put(
+                    medicamentoJson.get("nombreComercial").asText(),
+                    medicamentoJson.get("cantidad").asInt()
+            );
+        });
+        return map;
+    }
+
+    public static List<MedicamentoModel> getMedicamentosFromJson(JsonNode json){
+        if (!json.has("receta")) {
+            return null;
+        }
+        JsonNode jsonReceta = json.get("receta");
+        List<MedicamentoModel> medicamentosArray = new ArrayList<>();
+        jsonReceta.get("medicamentos").forEach( medicamentoJson -> {
+            MedicamentoModel medicamento = new MedicamentoModel(
+                    medicamentoJson.get("nombreComercial").asText(),
+                    medicamentoJson.get("nombreGenerico").asText(),
+                    medicamentoJson.get("presentacion").asText()
+            );
+            medicamentosArray.add(medicamento);
+        });
+        return medicamentosArray;
     }
 
     public static RecetaDigitalModel recetaDigitalDesdeJson(JsonNode json){
@@ -73,6 +110,13 @@ public class JsonParser {
         receteDigitalCabecera.setRecetaDigitaldetalle(recetaDigitalDetalles);
 
         return receteDigitalCabecera;
+    }
+
+    public static String pedidoLaboratorioDescriptionFromJson(JsonNode json){
+        if (!json.has("pedidoLaboratorio")) {
+            return null;
+        }
+        return json.get("pedidoLaboratorio").get("descripcion").asText("");
     }
 
     public static PedidoLaboratorioModel pedidoLaboratorioDesdeJson(JsonNode json){
@@ -193,7 +237,7 @@ public class JsonParser {
         String dni = json.get("dni").asText();
         String email = json.get("email").asText();
         String direccion = json.get("direccion").asText();
-        int telefono = json.get("telefono").asInt();
+        String telefono = json.get("telefono").asText();
 
         // Formateador de fecha para "yyyy-MM-dd"
         SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");

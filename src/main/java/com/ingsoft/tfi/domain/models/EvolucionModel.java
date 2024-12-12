@@ -1,8 +1,15 @@
 package com.ingsoft.tfi.domain.models;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.ingsoft.tfi.helpers.JsonParser;
 import jakarta.persistence.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Entity
@@ -27,7 +34,7 @@ public class EvolucionModel {
     private MedicoModel medico;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_receta")
+    @JoinColumn(name = "id_receta_digital")
     private RecetaDigitalModel recetaDigital;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -35,24 +42,43 @@ public class EvolucionModel {
     private PedidoLaboratorioModel pedidoLaboratorio;
 
     public EvolucionModel(String informe, Date fecha, MedicoModel medico,
-                          RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
+                          JsonNode recetaDigitalJson, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio) {
+        if (informe == null || informe.trim().equals("")){
+            throw new RuntimeException("Informe vacio o nulo.");
+        }
+
         this.informe = informe;
         this.fecha = fecha;
         this.medico = medico;
 
-        var posibleReceta = Optional.ofNullable(recetaDigital);
+        var posibleReceta = Optional.ofNullable(recetaDigitalJson);
         var posiblePedidoLab = Optional.ofNullable(pedidoLaboratorio);
 
         if(posibleReceta.isPresent() && posiblePedidoLab.isPresent()) {
             throw new IllegalArgumentException("No se puede crear una evolución con receta y con pedido de laboratorio");
         }
 
-        if(posibleReceta.isPresent()){
-            this.recetaDigital = recetaDigital;
+        if(posibleReceta.isPresent()) {
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = null;
+            try {
+                date = formatter.parse(recetaDigitalJson.get("fecha").asText());
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            String descripcion = recetaDigitalJson.get("descripcion").asText("");
+            RecetaDigitalModel recetaDigitalObject = new RecetaDigitalModel(
+                    date,
+                    descripcion,
+                    medicamentos,
+                    medicamentosAmount
+            );
+            this.recetaDigital = recetaDigitalObject;
         }
 
         if(posiblePedidoLab.isPresent()){
-            this.pedidoLaboratorio = pedidoLaboratorio;
+            PedidoLaboratorioModel pedidoLaboratorioObject = new PedidoLaboratorioModel(pedidoLaboratorio);
+            this.pedidoLaboratorio = pedidoLaboratorioObject;
         }
     }
 

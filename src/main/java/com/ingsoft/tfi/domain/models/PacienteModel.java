@@ -1,10 +1,12 @@
 package com.ingsoft.tfi.domain.models;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.ingsoft.tfi.domain.base.PersonaModel;
 import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "pacientes")
@@ -18,7 +20,7 @@ public class PacienteModel extends PersonaModel {
     @JoinColumn(name = "id_historia_clinica")
     private HistoriaClinicaModel historiaClinica;
 
-    public PacienteModel(String nombre, String apellido, String dni, String email, Date fechaNacimiento, String direccion, int telefono, Long id_paciente, HistoriaClinicaModel historiaClinica) {
+    public PacienteModel(String nombre, String apellido, String dni, String email, Date fechaNacimiento, String direccion, String telefono, Long id_paciente, HistoriaClinicaModel historiaClinica) {
         super(nombre, apellido, dni, email, fechaNacimiento, direccion, telefono);
         this.id_paciente = id_paciente;
         this.historiaClinica = historiaClinica;
@@ -30,7 +32,7 @@ public class PacienteModel extends PersonaModel {
                          String email,
                          Date fechaNacimiento,
                          String direccion,
-                         int telefono,
+                         String telefono,
                          List<String>diagnosticosPreexistentes) {
         super(nombre, apellido, dni, email, fechaNacimiento, direccion, telefono);
         this.historiaClinica = new HistoriaClinicaModel(diagnosticosPreexistentes);
@@ -45,8 +47,8 @@ public class PacienteModel extends PersonaModel {
     }
 
     public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe,
-                                 RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio){
-        this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital, pedidoLaboratorio);
+                                 JsonNode recetaDigital, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio){
+        this.historiaClinica.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital, medicamentos, medicamentosAmount, pedidoLaboratorio);
     }
 
     public Long getId_paciente() {

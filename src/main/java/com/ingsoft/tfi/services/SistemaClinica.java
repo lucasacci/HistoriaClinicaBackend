@@ -1,10 +1,12 @@
 package com.ingsoft.tfi.services;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.ingsoft.tfi.domain.models.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SistemaClinica {
@@ -16,12 +18,21 @@ public class SistemaClinica {
     }
 
     public PacienteModel agregarEvolucion(MedicoModel medico, String dniPaciente, Long diagnosticoElegido, String informe,
-                                          RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
+                                          JsonNode recetaDigital, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio) {
         PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
 
 
-        paciente.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital, pedidoLaboratorio);
+        paciente.agregarEvolucion(diagnosticoElegido, medico, informe, recetaDigital, medicamentos, medicamentosAmount, pedidoLaboratorio);
 
+        pacienteService.actualizarPaciente(paciente);
+        return paciente;
+    }
+
+    public PacienteModel editarEvolucion(Long idEvolucion, MedicoModel medico, String dniPaciente, Long idDiagnostico, String informe,
+                                         RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
+        PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
+        DiagnosticoModel diagnostico = paciente.buscarDiagnostico(idDiagnostico);
+        diagnostico.editarEvolucion(idEvolucion, medico, informe, recetaDigital, pedidoLaboratorio);
         pacienteService.actualizarPaciente(paciente);
         return paciente;
     }
@@ -68,16 +79,6 @@ public class SistemaClinica {
         diagnostico.eliminarEvolucion(idEvolucion);
         pacienteService.actualizarPaciente(paciente);
     }
-
-    public PacienteModel editarEvolucion(Long idEvolucion, MedicoModel medico, String dniPaciente, Long idDiagnostico, String informe,
-                                RecetaDigitalModel recetaDigital, PedidoLaboratorioModel pedidoLaboratorio) {
-        PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));
-        DiagnosticoModel diagnostico = paciente.buscarDiagnostico(idDiagnostico);
-        diagnostico.editarEvolucion(idEvolucion, medico, informe, recetaDigital, pedidoLaboratorio);
-        pacienteService.actualizarPaciente(paciente);
-        return paciente;
-    }
-
 
     public void eliminarDiagnostico(String dniPaciente, Long idDiagnostico) {
         PacienteModel paciente = pacienteService.buscarPaciente(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente inexistente"));

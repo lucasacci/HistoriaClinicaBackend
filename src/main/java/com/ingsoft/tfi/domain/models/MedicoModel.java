@@ -33,7 +33,7 @@ public class MedicoModel extends PersonaModel {
                        String email,
                        Date fechaNacimiento,
                        String direccion,
-                       int telefono,
+                       String telefono,
                        String matricula,
                        String especialidad) {
         super(nombre, apellido, dni, email, fechaNacimiento, direccion, telefono);
