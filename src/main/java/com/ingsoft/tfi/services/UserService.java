@@ -132,4 +132,12 @@ public class UserService {
     public Optional<UserModel> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    public IUserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    public void setUserRepository(IUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 }
