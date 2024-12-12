@@ -71,7 +71,7 @@ public class LoginStepDefinitions {
     @Then("Devuelve mensaje de Error de Autenticacion")
     public void devuelveMensajeDeErrorDeAutenticacion() {
         assertThat(isValidUser).isFalse();
-        System.out.println("Contraseña Incorrecta");
+        System.out.println("Error de autenticacion");
     }
 
     @Given("El medico {string} con mail {string} y contrasenia {string}")
