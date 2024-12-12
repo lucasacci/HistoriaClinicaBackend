@@ -98,7 +98,7 @@ public class LoginController {
             session.setAttribute("USER_EMAIL", loginRequest.getEmail());
             session.setAttribute("MEDICO", userOptional.get().getMedico());
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Inicio de sesión exitoso!",
                     null);
 
@@ -106,7 +106,7 @@ public class LoginController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (AuthenticationException e) {
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error de autenticación: " + e.getMessage(),
                     null);
 
@@ -114,7 +114,7 @@ public class LoginController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             e.printStackTrace();  // Agregado para ver el stack trace completo
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error interno: " + e.getMessage(),
                     null);
 
@@ -126,7 +126,7 @@ public class LoginController {
     @PostMapping("/logout")
     public ResponseEntity<JsonNode> logout(HttpSession session) {
         session.invalidate(); // Invalida la sesión actual
-        ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+        ApiResponse<JsonNode> response = new ApiResponse<>(
                 "Sesión cerrada exitosamente.",
                 null);
 
