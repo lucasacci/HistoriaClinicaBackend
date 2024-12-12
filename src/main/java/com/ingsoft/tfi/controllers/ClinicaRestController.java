@@ -310,7 +310,7 @@ public class ClinicaRestController {
         try{
             String resultado = sistemaClinica.borrarPaciente(dniPaciente);
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.OK.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     resultado,
                     null);
 
@@ -318,7 +318,7 @@ public class ClinicaRestController {
 
                 return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
             } catch (Exception e) {
-                ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                ApiResponse<String> response = new ApiResponse<>(
                         "Error al borrar paciente: " + e.getMessage(),
                         null);
 

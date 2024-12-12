@@ -43,7 +43,7 @@ public class LoginStepDefinitions {
                 email, // email
                 fecha,                  // fechaNacimiento
                 "Calle Principal 123",  // direccion
-                123456789,             // telefono
+                "123456789",             // telefono
                 "MP12345",             // matricula
                 "Cardiólogo"           // especialidad
         );
@@ -90,7 +90,7 @@ public class LoginStepDefinitions {
                 email, // email
                 fecha,                  // fechaNacimiento
                 "Calle Principal 123",  // direccion
-                123456789,             // telefono
+                "123456789",             // telefono
                 "MP12345",             // matricula
                 "Cardiólogo"           // especialidad
         );
