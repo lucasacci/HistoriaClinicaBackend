@@ -9,12 +9,18 @@ import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 import java.util.Optional;
 import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
+import com.ingsoft.tfi.security.JwtUtil;
 
 @Service
 public class UserService {
 
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -139,5 +145,29 @@ public class UserService {
 
     public void setUserRepository(IUserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public Map<String, Object> authenticateUser(String email, String password) {
+        Optional<UserModel> user = userRepository.findByEmail(email);
+        
+        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("email", email);
+            
+            if (user.get().getMedico() != null) {
+                claims.put("medicoId", user.get().getMedico().getId_medico());
+                claims.put("medicoNombre", user.get().getMedico().getNombre());
+            }
+
+            String token = jwtUtil.generateToken(email, claims);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("user", user.get());
+            
+            return response;
+        }
+        
+        throw new RuntimeException("Credenciales inválidas");
     }
 }
