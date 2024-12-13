@@ -23,6 +23,10 @@ public class MedicamentoModel {
     @Column
     private Integer cantidad;
 
+    @ManyToOne
+    @JoinColumn(name = "id_receta_digital")
+    private RecetaDigitalModel receta;
+
     public MedicamentoModel(String nombreComercial, String nombreGenerico, String presentacion, Integer cantidad) {
         this.nombreComercial = nombreComercial;
         this.nombreGenerico = nombreGenerico;
@@ -70,5 +74,13 @@ public class MedicamentoModel {
 
     public void setPresentacion(String presentacion) {
         this.presentacion = presentacion;
+    }
+
+    public RecetaDigitalModel getReceta() {
+        return receta;
+    }
+
+    public void setReceta(RecetaDigitalModel receta) {
+        this.receta = receta;
     }
 }
