@@ -19,8 +19,11 @@ public class JsonParser {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    public static JsonNode objectToJsonNode(Object object) {
+        return mapper.valueToTree(object);
+    }
+
     public static JsonNode responseAJson(ApiResponse<?> response) {
-        ObjectMapper mapper = new ObjectMapper();
         return mapper.valueToTree(response);
     }
 
