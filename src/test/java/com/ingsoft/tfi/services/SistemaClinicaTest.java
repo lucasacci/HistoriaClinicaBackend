@@ -55,7 +55,7 @@ class SistemaClinicaTest {
         when(this.repositorioPaciente.findByDni(dniPaciente)).thenReturn(Optional.of(paciente));
 
         //Act
-        PacienteModel pacienteRespuesta = sistemaClinica.agregarEvolucion(medico, dniPaciente, idDiagnostico, informeSimple,null, null, null, null);
+        PacienteModel pacienteRespuesta = sistemaClinica.agregarEvolucion(medico, dniPaciente, idDiagnostico, informeSimple,null, null, null);
 
         //Assert
         assertThat(pacienteRespuesta.getHistoriaClinica().getDiagnosticos().getFirst().getEvoluciones().getFirst().getInforme()).isEqualTo(informeSimple);
@@ -86,7 +86,7 @@ class SistemaClinicaTest {
         when(this.repositorioPaciente.findByDni(dniPaciente)).thenReturn(Optional.of(paciente));
 
         //Act
-        assertThatThrownBy(() -> sistemaClinica.agregarEvolucion(medico, dniPaciente, idDiagnostico, informeSimple,null, null, null, null))
+        assertThatThrownBy(() -> sistemaClinica.agregarEvolucion(medico, dniPaciente, idDiagnostico, informeSimple,null, null, null))
                 .hasMessage("Informe vacio o nulo.");
 
         //Assert
@@ -116,7 +116,7 @@ class SistemaClinicaTest {
         when(this.repositorioPaciente.findByDni(dniPaciente)).thenReturn(Optional.of(paciente));
 
         //Act
-        assertThatThrownBy(() -> sistemaClinica.agregarEvolucion(medico, dniPaciente, idDiagnostico, informeSimple,null, null, null, null))
+        assertThatThrownBy(() -> sistemaClinica.agregarEvolucion(medico, dniPaciente, idDiagnostico, informeSimple,null, null, null))
                 .hasMessage("Informe vacio o nulo.");
 
         //Assert
@@ -146,7 +146,7 @@ class SistemaClinicaTest {
         when(this.repositorioPaciente.findByDni(dniPaciente)).thenReturn(Optional.of(paciente));
 
         //Act
-        assertThatThrownBy(() -> sistemaClinica.agregarEvolucion(medico, dniPaciente, idDiagnostico, informeSimple,null, null, null, null))
+        assertThatThrownBy(() -> sistemaClinica.agregarEvolucion(medico, dniPaciente, idDiagnostico, informeSimple,null, null, null))
                 .hasMessage("Informe vacio o nulo.");
 
         //Assert
