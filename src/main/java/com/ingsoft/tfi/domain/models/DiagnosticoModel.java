@@ -84,9 +84,9 @@ public class DiagnosticoModel {
     }
 
     public void agregarEvolucion(MedicoModel medico, String informe,
-                                 JsonNode recetaDigital, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio) {
+                                 JsonNode recetaDigital, List<MedicamentoModel> medicamentos, String pedidoLaboratorio) {
         Timestamp fechaEvolucion = new Timestamp(new Date().getTime());
-        EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital, medicamentos, medicamentosAmount, pedidoLaboratorio);
+        EvolucionModel evolucion = new EvolucionModel(informe, fechaEvolucion, medico, recetaDigital, medicamentos, pedidoLaboratorio);
         evolucion.setDiagnostico(this);
         evoluciones.add(evolucion);
     }

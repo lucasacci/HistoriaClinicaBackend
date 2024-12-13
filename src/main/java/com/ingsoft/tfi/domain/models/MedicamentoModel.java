@@ -20,10 +20,14 @@ public class MedicamentoModel {
     @Column
     private String presentacion;
 
-    public MedicamentoModel(String nombreComercial, String nombreGenerico, String presentacion) {
+    @Column
+    private Integer cantidad;
+
+    public MedicamentoModel(String nombreComercial, String nombreGenerico, String presentacion, Integer cantidad) {
         this.nombreComercial = nombreComercial;
         this.nombreGenerico = nombreGenerico;
         this.presentacion = presentacion;
+        this.cantidad = cantidad;
     }
 
     public MedicamentoModel(){}
@@ -50,5 +54,21 @@ public class MedicamentoModel {
 
     public void setNombreGenerico(String nombreGenerico) {
         this.nombreGenerico = nombreGenerico;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public String getPresentacion() {
+        return presentacion;
+    }
+
+    public void setPresentacion(String presentacion) {
+        this.presentacion = presentacion;
     }
 }

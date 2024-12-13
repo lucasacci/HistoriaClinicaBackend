@@ -64,7 +64,8 @@ public class JsonParser {
             MedicamentoModel medicamento = new MedicamentoModel(
                     medicamentoJson.get("nombreComercial").asText(),
                     medicamentoJson.get("nombreGenerico").asText(),
-                    medicamentoJson.get("presentacion").asText()
+                    medicamentoJson.get("presentacion").asText(),
+                    medicamentoJson.get("cantidad").asInt()
             );
             medicamentosArray.add(medicamento);
         });
@@ -78,7 +79,7 @@ public class JsonParser {
 
         JsonNode jsonReceta = json.get("receta");
 
-        List<RecetaDigitalDetalleModel> recetaDigitalDetalles = new ArrayList<>();
+        List<MedicamentoModel> medicamentos = new ArrayList<>();
 
         //TODO: Armar esta funcion para que obtenga los datos de los medicamentos se busquen en la base de datos
 
@@ -88,16 +89,10 @@ public class JsonParser {
             MedicamentoModel medicamento = new MedicamentoModel(
                     medicamentoJson.get("nombreComercial").asText(),
                     medicamentoJson.get("nombreGenerico").asText(),
-                    medicamentoJson.get("presentacion").asText()
+                    medicamentoJson.get("presentacion").asText(),
+                    medicamentoJson.get("cantidad").asInt()
             );
-
-            RecetaDigitalDetalleModel detalle = new RecetaDigitalDetalleModel(
-                    medicamentoJson.get("cantidad").asInt(),
-                    medicamento,
-                    receteDigitalCabecera
-            );
-
-            recetaDigitalDetalles.add(detalle);
+            medicamentos.add(medicamento);
         });
 
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -110,7 +105,7 @@ public class JsonParser {
 
         receteDigitalCabecera.setFecha(date);
         receteDigitalCabecera.setDescripcion(jsonReceta.get("descripcion").asText());
-        receteDigitalCabecera.setRecetaDigitaldetalle(recetaDigitalDetalles);
+        receteDigitalCabecera.setMedicamentos(medicamentos);
 
         return receteDigitalCabecera;
     }
@@ -214,8 +209,8 @@ public class JsonParser {
         json.put("fecha", recetaDigital.getFecha().toString());
         json.put("descripcion", recetaDigital.getDescripcion());
 
-        recetaDigital.getRecetaDigitaldetalle().forEach(receta -> {
-            array.add(MedicamentoAJson(receta));
+        recetaDigital.getMedicamentos().forEach(medicamentoModel -> {
+            array.add(MedicamentoAJson(medicamentoModel));
         });
 
         json.set("medicamentos", array);
@@ -223,12 +218,13 @@ public class JsonParser {
         return json;
     }
 
-    private static JsonNode MedicamentoAJson(RecetaDigitalDetalleModel recetaDetalle) {
+    private static JsonNode MedicamentoAJson(MedicamentoModel medicamento) {
         ObjectNode json = mapper.createObjectNode();
 
-        json.put("nombreComercial", recetaDetalle.getMedicamento().getNombreComercial());
-        json.put("nombreGenerico", recetaDetalle.getMedicamento().getNombreGenerico());
-        json.put("cantidad", recetaDetalle.getCantidad());
+        json.put("nombreComercial", medicamento.getNombreComercial());
+        json.put("nombreGenerico", medicamento.getNombreGenerico());
+        json.put("presentacion", medicamento.getPresentacion());
+        json.put("cantidad", medicamento.getCantidad());
 
         return json;
     }

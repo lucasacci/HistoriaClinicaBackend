@@ -2,10 +2,7 @@ package com.ingsoft.tfi.domain.models;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
@@ -22,37 +19,33 @@ public class RecetaDigitalModel {
     @Column
     private String descripcion;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "id_receta_digital_detalle")
-    private List<RecetaDigitalDetalleModel> recetaDigitaldetalle;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "id_medicamento")
+    private List<MedicamentoModel> medicamentos;
 
-    public RecetaDigitalModel(Date fecha, String descripcion, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount) {
+    public RecetaDigitalModel(Date fecha, String descripcion, List<MedicamentoModel> medicamentos) {
         if (descripcion == null || descripcion.trim().equals("")){
             throw new IllegalArgumentException("Descripcion de Receta Nula o Vacia.");
         }
 
         this.fecha = fecha;
         this.descripcion = descripcion;
-        List<RecetaDigitalDetalleModel> recetaDigitaldetalle = new ArrayList<>();
-        AtomicInteger counter = new AtomicInteger();
-        medicamentos.forEach(medicamentoModel -> {
-            recetaDigitaldetalle.add(new RecetaDigitalDetalleModel(
-                    medicamentosAmount.get(
-                            medicamentoModel.getNombreComercial()),
-                            medicamentoModel,
-                            this
-                    )
-            );
-            counter.set(counter.get() + 1);
-        });
 
-        if(counter.get() >= 3) {
+        var posiblesMedicamentos = Optional.ofNullable(medicamentos);
+
+        if (posiblesMedicamentos.isEmpty()){
+            throw new IllegalArgumentException("Medicamentos nulos o vacios");
+        }
+
+        int counter = medicamentos.size();
+
+        if(counter >= 3) {
             throw new IllegalArgumentException("Se ingresaron mas de tres medicamentos a la Receta Digital.");
         }
-        if(counter.get() == 0) {
+        if(counter == 0) {
             throw new IllegalArgumentException("No se ingresaron medicamentos en la Receta Digital.");
         }
 
-        this.recetaDigitaldetalle = recetaDigitaldetalle;
+        this.medicamentos = medicamentos;
     }
 
 
@@ -72,9 +65,6 @@ public class RecetaDigitalModel {
         return descripcion;
     }
 
-    public List<RecetaDigitalDetalleModel> getRecetaDigitaldetalle() {
-        return recetaDigitaldetalle;
-    }
 
     public void setId_receta_digital(int id_receta_digital) {
         this.id_receta_digital = id_receta_digital;
@@ -88,7 +78,11 @@ public class RecetaDigitalModel {
         this.descripcion = descripcion;
     }
 
-    public void setRecetaDigitaldetalle(List<RecetaDigitalDetalleModel> recetaDigitaldetalle) {
-        this.recetaDigitaldetalle = recetaDigitaldetalle;
+    public List<MedicamentoModel> getMedicamentos() {
+        return medicamentos;
+    }
+
+    public void setMedicamentos(List<MedicamentoModel> medicamentos) {
+        this.medicamentos = medicamentos;
     }
 }
