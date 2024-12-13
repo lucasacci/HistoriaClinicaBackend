@@ -49,10 +49,10 @@ public class HistoriaClinicaModel {
     }
 
     public void agregarEvolucion(Long diagnosticoElegido, MedicoModel medico, String informe,
-                                 JsonNode recetaDigital, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio) {
+                                 JsonNode recetaDigital, List<MedicamentoModel> medicamentos, String pedidoLaboratorio) {
         DiagnosticoModel diagnostico = buscarDiagnostico(diagnosticoElegido);
         if (diagnostico != null) {
-            diagnostico.agregarEvolucion(medico, informe, recetaDigital, medicamentos, medicamentosAmount, pedidoLaboratorio);
+            diagnostico.agregarEvolucion(medico, informe, recetaDigital, medicamentos, pedidoLaboratorio);
         } else {
             throw new RuntimeException("Diagnóstico no encontrado");
         }

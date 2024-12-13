@@ -42,7 +42,7 @@ public class EvolucionModel {
     private PedidoLaboratorioModel pedidoLaboratorio;
 
     public EvolucionModel(String informe, Date fecha, MedicoModel medico,
-                          JsonNode recetaDigitalJson, List<MedicamentoModel> medicamentos, Map<String,Integer> medicamentosAmount, String pedidoLaboratorio) {
+                          JsonNode recetaDigitalJson, List<MedicamentoModel> medicamentos, String pedidoLaboratorio) {
         if (informe == null || informe.trim().equals("")){
             throw new RuntimeException("Informe vacio o nulo.");
         }
@@ -70,8 +70,7 @@ public class EvolucionModel {
             RecetaDigitalModel recetaDigitalObject = new RecetaDigitalModel(
                     date,
                     descripcion,
-                    medicamentos,
-                    medicamentosAmount
+                    medicamentos
             );
             this.recetaDigital = recetaDigitalObject;
         }

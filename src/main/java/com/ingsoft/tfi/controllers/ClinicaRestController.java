@@ -61,14 +61,9 @@ public class ClinicaRestController {
                     JsonParser.informeDesdeJson(json),
                     JsonParser.checkRecetaDigiatal(json),
                     JsonParser.getMedicamentosFromJson(json),
-                    JsonParser.getMedicamentosAmountFromJson(json),
                     JsonParser.pedidoLaboratorioDescriptionFromJson(json)
             );
-            paciente.getHistoriaClinica().getDiagnosticos().forEach(e->
-                    e.getEvoluciones().forEach(x ->
-                            System.out.println(x.getFecha())
-                    )
-            );
+
             ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Evolución agregada exitosamente.",
                     JsonParser.pacienteAJson(paciente));
