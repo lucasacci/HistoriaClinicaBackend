@@ -180,7 +180,7 @@ public class JsonParser {
 
         json.put("id_evolucion", evolucion.getId_evolucion());
         json.put("informe", evolucion.getInforme());
-        json.put("doctor", evolucion.getMedico().getNombre());
+        json.put("doctor", evolucion.getMedico().getNombre() + evolucion.getMedico().getApellido());
         json.put("fecha", formattedDate);
 
         if (evolucion.getRecetaDigital() != null) {
