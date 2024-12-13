@@ -19,7 +19,7 @@ public class RecetaDigitalModel {
     @Column
     private String descripcion;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "id_medicamento")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "receta")
     private List<MedicamentoModel> medicamentos;
 
     public RecetaDigitalModel(Date fecha, String descripcion, List<MedicamentoModel> medicamentos) {
@@ -44,7 +44,7 @@ public class RecetaDigitalModel {
         if(counter == 0) {
             throw new IllegalArgumentException("No se ingresaron medicamentos en la Receta Digital.");
         }
-
+        medicamentos.forEach(medicamentoModel -> medicamentoModel.setReceta(this));
         this.medicamentos = medicamentos;
     }
 
